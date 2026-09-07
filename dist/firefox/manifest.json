@@ -59,9 +59,15 @@
       "world": "MAIN"
     }
   ],
-  "minimum_chrome_version": "111",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "velocityx@xenonesis.github.io",
+      "strict_min_version": "109.0"
+    }
+  },
   "background": {
-    "service_worker": "background.js",
-    "type": "module"
+    "scripts": [
+      "background.js"
+    ]
   }
 }

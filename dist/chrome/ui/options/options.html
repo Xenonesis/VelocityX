@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velocity — Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="options-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 19 22 12 13 5 13 19"></polygon>
+            <polygon points="2 19 11 12 2 19"></polygon>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <span class="brand-title">Velocity</span>
+          <span class="brand-subtitle">Playback Controls</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="general">
+          <span class="nav-icon">⚙️</span>
+          <span>General</span>
+        </button>
+        <button class="nav-item" data-tab="shortcuts">
+          <span class="nav-icon">⌨️</span>
+          <span>Shortcuts</span>
+        </button>
+        <button class="nav-item" data-tab="controller">
+          <span class="nav-icon">🎛️</span>
+          <span>Controller Overlay</span>
+        </button>
+        <button class="nav-item" data-tab="sites">
+          <span class="nav-icon">🌐</span>
+          <span>Site Rules</span>
+        </button>
+        <button class="nav-item" data-tab="advanced">
+          <span class="nav-icon">🛡️</span>
+          <span>Advanced</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>Velocity v1.0.0</span>
+        <span class="privacy-note">Privacy First — 100% Offline</span>
+      </div>
+    </aside>
+
+    <!-- Content Panels -->
+    <main class="main-content">
+      <!-- Toast notification -->
+      <div id="save-toast" class="toast">Settings saved</div>
+
+      <!-- Tab 1: General -->
+      <section id="panel-general" class="tab-panel active">
+        <div class="panel-header">
+          <h2>General Settings</h2>
+          <p class="panel-desc">Configure default playback speeds, adjustment steps, and behavior.</p>
+        </div>
+
+        <div class="settings-card">
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="ext-enabled">Extension Enabled</label>
+              <span class="hint">Enable or disable media controls universally.</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="ext-enabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="default-speed">Default Speed</label>
+              <span class="hint">Initial playback speed for newly opened media (0.07× – 16×).</span>
+            </div>
+            <input type="number" id="default-speed" step="0.05" min="0.07" max="16" class="num-input">
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="speed-step">Speed Step</label>
+              <span class="hint">Amount added or subtracted on each speed up/down action.</span>
+            </div>
+            <input type="number" id="speed-step" step="0.05" min="0.01" max="2" class="num-input">
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="preferred-speed">Preferred Speed</label>
+              <span class="hint">Target rate when pressing the preferred speed toggle shortcut.</span>
+            </div>
+            <input type="number" id="preferred-speed" step="0.1" min="0.07" max="16" class="num-input">
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="remember-speed">Remember Playback Speed</label>
+              <span class="hint">Keep and restore the last chosen speed across videos and sessions.</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="remember-speed">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="rewind-sec">Rewind Duration</label>
+              <span class="hint">Seconds to jump backwards.</span>
+            </div>
+            <input type="number" id="rewind-sec" min="1" max="120" class="num-input">
+          </div>
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="audio-support">Audio Support</label>
+              <span class="hint">Show and apply speed controls to &lt;audio&gt; elements as well.</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="audio-support">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="start-hidden">Hide Controller by Default</label>
+              <span class="hint">Keep controller overlay hidden until toggled via shortcut (V).</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="start-hidden">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="advance-sec">Forward Duration</label>
+              <span class="hint">Seconds to jump forwards.</span>
+            </div>
+            <input type="number" id="advance-sec" min="1" max="120" class="num-input">
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 2: Shortcuts -->
+      <section id="panel-shortcuts" class="tab-panel">
+        <div class="panel-header">
+          <h2>Keyboard Shortcuts</h2>
+          <p class="panel-desc">Customize key bindings. Shortcuts automatically avoid stealing input while typing.</p>
+        </div>
+
+        <div class="settings-card">
+          <table class="shortcuts-table">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Shortcut</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="shortcuts-body">
+              <!-- Rendered via options.ts -->
+            </tbody>
+          </table>
+
+          <div class="card-footer">
+            <button id="reset-shortcuts-btn" class="btn secondary">Reset Shortcuts to Defaults</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 3: Controller Overlay -->
+      <section id="panel-controller" class="tab-panel">
+        <div class="panel-header">
+          <h2>Controller Overlay</h2>
+          <p class="panel-desc">Customize appearance and positioning of the on-screen media pill.</p>
+        </div>
+
+        <div class="settings-card">
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="overlay-enabled">Show In-Video Controller</label>
+              <span class="hint">Render the draggable speed pill directly over videos.</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="overlay-enabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="overlay-opacity">Overlay Opacity</label>
+              <span class="hint">Adjust transparency of the pill overlay.</span>
+            </div>
+            <div class="slider-control">
+              <input type="range" id="overlay-opacity" min="0.2" max="1.0" step="0.05">
+              <span id="opacity-val">90%</span>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label>Controller Position</label>
+              <span class="hint">Reset pill coordinates back to top-left corner.</span>
+            </div>
+            <button id="reset-position-btn" class="btn secondary">Reset Position</button>
+          </div>
+
+          <div class="setting-group">
+            <label for="custom-css">Custom Overlay CSS</label>
+            <span class="hint">Advanced CSS applied directly inside the Shadow DOM shell.</span>
+            <textarea id="custom-css" rows="4" placeholder="/* e.g. .velocity-pill { border-radius: 4px; } */"></textarea>
+            <div class="btn-row">
+              <button id="reset-css-btn" class="btn secondary">Clear Custom CSS</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 4: Site Rules -->
+      <section id="panel-sites" class="tab-panel">
+        <div class="panel-header">
+          <h2>Per-Site Rules</h2>
+          <p class="panel-desc">Configure custom default speeds or disable controls for specific domains.</p>
+        </div>
+
+        <!-- Add rule form -->
+        <div class="settings-card">
+          <h3>Add Site Rule</h3>
+          <div class="add-rule-form">
+            <div class="form-field">
+              <label for="new-rule-domain">Domain Pattern</label>
+              <input type="text" id="new-rule-domain" placeholder="e.g. *.coursera.org or youtube.com">
+            </div>
+            <div class="form-field">
+              <label for="new-rule-speed">Default Speed</label>
+              <input type="number" id="new-rule-speed" step="0.05" min="0.07" max="16" placeholder="1.5">
+            </div>
+            <div class="form-field check-field">
+              <label>
+                <input type="checkbox" id="new-rule-enabled" checked>
+                <span>Enabled</span>
+              </label>
+            </div>
+            <button id="add-rule-btn" class="btn primary">Add Rule</button>
+          </div>
+        </div>
+
+        <!-- Existing rules table -->
+        <div class="settings-card">
+          <h3>Configured Rules</h3>
+          <table class="rules-table">
+            <thead>
+              <tr>
+                <th>Domain</th>
+                <th>Default Speed</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rules-body">
+              <!-- Rendered via options.ts -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Tab 5: Advanced -->
+      <section id="panel-advanced" class="tab-panel">
+        <div class="panel-header">
+          <h2>Advanced Settings</h2>
+          <p class="panel-desc">Engine compatibility, configuration backup, and maintenance.</p>
+        </div>
+
+        <div class="settings-card">
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="fight-resets">Fight Automatic Rate Resets</label>
+              <span class="hint">Intelligently restore desired playback rate when players attempt silent resets.</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="fight-resets">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label>Backup & Restore</label>
+              <span class="hint">Export or import your complete configuration as JSON.</span>
+            </div>
+            <div class="btn-group">
+              <button id="export-settings-btn" class="btn secondary">Export JSON</button>
+              <label class="btn secondary file-upload">
+                Import JSON
+                <input type="file" id="import-settings-file" accept=".json" style="display:none">
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item danger-zone">
+            <div class="setting-text">
+              <label>Factory Reset</label>
+              <span class="hint">Erase all custom shortcuts, rules, and restore factory defaults.</span>
+            </div>
+            <button id="factory-reset-btn" class="btn danger">Reset All Settings</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

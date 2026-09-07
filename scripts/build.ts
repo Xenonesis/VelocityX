@@ -1,9 +1,12 @@
 import esbuild from "esbuild";
 import fs from "node:fs";
 import path from "node:path";
+import { generateManifest } from "./manifests";
 
 const isWatch = process.argv.includes("--watch");
 const distDir = path.resolve(process.cwd(), "dist");
+const chromeDir = path.resolve(distDir, "chrome");
+const firefoxDir = path.resolve(distDir, "firefox");
 
 function copyFile(src: string, dest: string) {
   const destDir = path.dirname(dest);
@@ -31,8 +34,11 @@ function copyDir(src: string, dest: string) {
 }
 
 async function copyStaticAssets() {
-  // Manifest
-  copyFile(path.resolve(process.cwd(), "manifest.json"), path.join(distDir, "manifest.json"));
+  const pkg = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "package.json"), "utf8"));
+
+  // Write Chrome manifest to root dist and dist/chrome
+  const chromeManifest = generateManifest("chrome", { version: pkg.version });
+  fs.writeFileSync(path.join(distDir, "manifest.json"), JSON.stringify(chromeManifest, null, 2));
 
   // Icons
   copyDir(path.resolve(process.cwd(), "src/assets/icons"), path.join(distDir, "assets/icons"));
@@ -45,7 +51,38 @@ async function copyStaticAssets() {
   copyFile(path.resolve(process.cwd(), "src/ui/options/options.html"), path.join(distDir, "ui/options/options.html"));
   copyFile(path.resolve(process.cwd(), "src/ui/options/options.css"), path.join(distDir, "ui/options/options.css"));
 
-  console.log("[Build] Copied static assets to dist/");
+  // Replicate to dist/chrome and dist/firefox
+  const browserOutputs = [
+    { dir: chromeDir, target: "chrome" as const },
+    { dir: firefoxDir, target: "firefox" as const },
+  ];
+
+  const filesToReplicate = [
+    "background.js",
+    "isolated-bridge.js",
+    "main-entry.js",
+    "ui/popup/popup.js",
+    "ui/popup/popup.html",
+    "ui/popup/popup.css",
+    "ui/options/options.js",
+    "ui/options/options.html",
+    "ui/options/options.css",
+  ];
+
+  for (const { dir, target } of browserOutputs) {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    copyDir(path.resolve(process.cwd(), "src/assets/icons"), path.join(dir, "assets/icons"));
+    for (const f of filesToReplicate) {
+      const srcPath = path.join(distDir, f);
+      if (fs.existsSync(srcPath)) {
+        copyFile(srcPath, path.join(dir, f));
+      }
+    }
+    const targetManifest = generateManifest(target, { version: pkg.version });
+    fs.writeFileSync(path.join(dir, "manifest.json"), JSON.stringify(targetManifest, null, 2));
+  }
+
+  console.log("[Build] Copied static assets and generated manifests for Chrome & Firefox");
 }
 
 async function build() {

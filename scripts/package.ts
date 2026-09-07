@@ -130,7 +130,15 @@ export function buildZip(sourceDir: string, outputFile: string): void {
 }
 
 const distDir = path.resolve(process.cwd(), "dist");
+const chromeDir = path.resolve(distDir, "chrome");
+const firefoxDir = path.resolve(distDir, "firefox");
 const packageJson = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "package.json"), "utf8"));
-const releaseFile = path.resolve(process.cwd(), `release/velocityx-v${packageJson.version}.zip`);
 
-buildZip(distDir, releaseFile);
+// 1. Standard Chrome store zip
+buildZip(chromeDir, path.resolve(process.cwd(), `release/velocityx-chrome-v${packageJson.version}.zip`));
+buildZip(chromeDir, path.resolve(process.cwd(), `release/velocityx-v${packageJson.version}.zip`));
+
+// 2. Firefox Add-ons store zip
+if (fs.existsSync(firefoxDir)) {
+  buildZip(firefoxDir, path.resolve(process.cwd(), `release/velocityx-firefox-v${packageJson.version}.zip`));
+}
