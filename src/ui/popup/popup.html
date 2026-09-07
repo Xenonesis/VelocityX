@@ -3,90 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Velocity</title>
+  <title>VelocityX</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div class="popup-container">
-    <header class="popup-header">
+    <!-- Top Deck: Brand & Status Telemetry -->
+    <header class="deck-header">
       <div class="brand">
-        <div class="brand-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <div class="brand-glyph">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="13 19 22 12 13 5 13 19"></polygon>
             <polygon points="2 19 11 12 2 19"></polygon>
           </svg>
         </div>
-        <span class="brand-name">Velocity</span>
-        <span class="version-tag">v1.0</span>
+        <div class="brand-text">
+          <span class="brand-title">VELOCITY<span class="brand-accent">X</span></span>
+          <span class="brand-tag">PRECISION ENGINE</span>
+        </div>
       </div>
-      <button id="open-settings-btn" class="icon-btn" aria-label="Open Settings" title="Settings">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+      <button id="open-settings-btn" class="settings-trigger" aria-label="Open Settings" title="Configure Settings">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"></circle>
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
         </svg>
       </button>
     </header>
 
-    <div id="media-status-badge" class="status-indicator">
-      <span class="status-dot"></span>
-      <span id="status-text">Scanning for media...</span>
+    <!-- Signal Connection Bar -->
+    <div id="media-status-badge" class="telemetry-bar">
+      <span class="signal-beacon"></span>
+      <span id="status-text" class="signal-status">Scanning active media...</span>
     </div>
 
-    <!-- Live Speed Control Gauge -->
-    <div class="gauge-section">
-      <button id="slower-btn" class="gauge-btn" aria-label="Decrease speed">−</button>
-      <div class="gauge-display">
-        <span id="speed-display" class="speed-value">1.0×</span>
-        <span class="speed-label">Playback Speed</span>
+    <!-- Main Instrument: Rate Chronometer Chamber -->
+    <section class="chrono-chamber">
+      <div class="chamber-label">
+        <span>PLAYBACK VELOCITY</span>
+        <span class="chamber-unit">RATE RATIO</span>
       </div>
-      <button id="faster-btn" class="gauge-btn" aria-label="Increase speed">+</button>
-    </div>
 
-    <!-- Quick Presets -->
-    <div class="presets-section">
-      <span class="section-title">Quick Presets</span>
-      <div class="preset-buttons">
-        <button class="preset-btn" data-speed="1.0">1.0×</button>
+      <div class="stepper-rack">
+        <button id="slower-btn" class="stepper-key" aria-label="Decrease speed" title="Step Slower (-0.1x)">
+          <span class="key-symbol">−</span>
+          <span class="key-sub">STEP</span>
+        </button>
+
+        <div class="readout-core">
+          <div class="readout-glare"></div>
+          <span id="speed-display" class="rate-numeral">1.00×</span>
+        </div>
+
+        <button id="faster-btn" class="stepper-key" aria-label="Increase speed" title="Step Faster (+0.1x)">
+          <span class="key-symbol">+</span>
+          <span class="key-sub">STEP</span>
+        </button>
+      </div>
+
+      <!-- Tactile Transport Strip / Presets -->
+      <div class="preset-strip" role="group" aria-label="Speed presets">
+        <button class="preset-btn" data-speed="1.0">1.00×</button>
         <button class="preset-btn" data-speed="1.25">1.25×</button>
-        <button class="preset-btn" data-speed="1.5">1.5×</button>
+        <button class="preset-btn" data-speed="1.5">1.50×</button>
         <button class="preset-btn" data-speed="1.75">1.75×</button>
-        <button class="preset-btn" data-speed="2.0">2.0×</button>
-        <button class="preset-btn" data-speed="3.0">3.0×</button>
+        <button class="preset-btn" data-speed="2.0">2.00×</button>
+        <button class="preset-btn" data-speed="3.0">3.00×</button>
       </div>
-    </div>
+    </section>
 
-    <!-- Audio Volume Boost -->
-    <div class="boost-section" style="margin-top: 10px; padding: 10px; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-        <span style="font-size: 12px; color: #94a3b8; font-weight: 500;">Audio Volume Boost</span>
-        <span id="boost-display" style="font-size: 12px; color: #38bdf8; font-weight: 600;">100%</span>
+    <!-- Audio Dynamics Section -->
+    <section class="dynamics-deck">
+      <div class="dynamics-header">
+        <div class="deck-title-group">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <span class="deck-title">AUDIO GAIN STAGE</span>
+        </div>
+        <span id="boost-display" class="gain-readout">100%</span>
       </div>
-      <div style="display: flex; gap: 6px;">
-        <button class="boost-btn preset-btn" data-boost="1.0" style="flex: 1; padding: 4px;">100%</button>
-        <button class="boost-btn preset-btn" data-boost="1.5" style="flex: 1; padding: 4px;">150%</button>
-        <button class="boost-btn preset-btn" data-boost="2.0" style="flex: 1; padding: 4px;">200%</button>
-        <button class="boost-btn preset-btn" data-boost="3.0" style="flex: 1; padding: 4px;">300%</button>
-      </div>
-    </div>
 
-    <!-- Quick Preferences -->
-    <div class="toggles-section">
-      <label class="toggle-row">
-        <span>Remember speed</span>
-        <input type="checkbox" id="remember-speed-toggle">
-        <span class="toggle-switch"></span>
-      </label>
-      <label class="toggle-row">
-        <span>Show controller on page</span>
-        <input type="checkbox" id="overlay-enabled-toggle">
-        <span class="toggle-switch"></span>
-      </label>
-      <label class="toggle-row">
-        <span>Skip silence gaps (3.0x)</span>
+      <div class="gain-selector" role="group" aria-label="Audio boost levels">
+        <button class="boost-btn" data-boost="1.0">100%</button>
+        <button class="boost-btn" data-boost="1.5">+50%</button>
+        <button class="boost-btn" data-boost="2.0">+100%</button>
+        <button class="boost-btn" data-boost="3.0">+200%</button>
+      </div>
+    </section>
+
+    <!-- Transport & Engine Toggles -->
+    <section class="switches-deck">
+      <label class="console-toggle">
+        <div class="toggle-meta">
+          <span class="toggle-title">Silence Skip</span>
+          <span class="toggle-desc">Accelerate quiet audio to 3.0×</span>
+        </div>
         <input type="checkbox" id="silence-skip-toggle">
-        <span class="toggle-switch"></span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
       </label>
-    </div>
+
+      <label class="console-toggle">
+        <div class="toggle-meta">
+          <span class="toggle-title">On-Screen Overlay HUD</span>
+          <span class="toggle-desc">Floating draggable video pill</span>
+        </div>
+        <input type="checkbox" id="overlay-enabled-toggle">
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </label>
+
+      <label class="console-toggle">
+        <div class="toggle-meta">
+          <span class="toggle-title">Memory Persistence</span>
+          <span class="toggle-desc">Restore last rate across sessions</span>
+        </div>
+        <input type="checkbox" id="remember-speed-toggle">
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </label>
+    </section>
+
+    <!-- Technical Legend / Quick Hotkeys Footer -->
+    <footer class="console-footer">
+      <div class="hotkey-capsule">
+        <span class="cap"><kbd>S</kbd> -0.1</span>
+        <span class="cap"><kbd>D</kbd> +0.1</span>
+        <span class="cap"><kbd>R</kbd> Reset</span>
+        <span class="cap"><kbd>K</kbd> Silence</span>
+        <span class="cap"><kbd>P</kbd> PiP</span>
+      </div>
+    </footer>
   </div>
   <script type="module" src="popup.js"></script>
 </body>

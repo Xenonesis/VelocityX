@@ -126,12 +126,18 @@ function setupEventListeners() {
   const boostButtons = document.querySelectorAll<HTMLButtonElement>(".boost-btn[data-boost]");
   const boostDisplay = document.getElementById("boost-display");
   boostButtons.forEach((btn) => {
+    const boost = parseFloat(btn.dataset.boost || "1.0");
+    if (Math.abs(boost - 1.0) < 0.01) {
+      btn.classList.add("active");
+    }
     btn.addEventListener("click", async () => {
-      const boost = parseFloat(btn.dataset.boost || "1.0");
+      const bVal = parseFloat(btn.dataset.boost || "1.0");
       if (boostDisplay) {
-        boostDisplay.textContent = `${Math.round(boost * 100)}%`;
+        boostDisplay.textContent = `${Math.round(bVal * 100)}%`;
       }
-      await sendActionToTab({ type: "audio.boost.set", value: boost });
+      boostButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      await sendActionToTab({ type: "audio.boost.set", value: bVal });
     });
   });
 

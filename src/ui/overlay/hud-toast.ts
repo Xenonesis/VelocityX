@@ -19,17 +19,18 @@ const TOAST_STYLE = `
   transform: translate(-50%, 0) !important;
 }
 .toast-badge {
-  background: rgba(15, 23, 42, 0.85) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  color: #ffffff !important;
-  font-size: 15px !important;
-  font-weight: 600 !important;
+  background: rgba(10, 12, 16, 0.88) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  color: #f8fafc !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
   line-height: 1.4 !important;
   padding: 8px 18px !important;
   border-radius: 9999px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.12) !important;
-  letter-spacing: 0.3px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.14) !important;
+  letter-spacing: 0.2px !important;
   display: inline-flex !important;
   align-items: center !important;
   gap: 8px !important;
@@ -39,8 +40,9 @@ const TOAST_STYLE = `
 }
 .toast-icon {
   font-size: 14px !important;
-  color: #38bdf8 !important;
+  color: #38e1ff !important;
   display: inline-block !important;
+  text-shadow: 0 0 8px rgba(56, 225, 255, 0.4) !important;
 }
 `;
 

@@ -3,72 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Velocity — Settings</title>
+  <title>VelocityX — Precision Settings</title>
   <link rel="stylesheet" href="options.css">
 </head>
 <body>
   <div class="options-layout">
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar Navigation Deck -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="brand-logo">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="13 19 22 12 13 5 13 19"></polygon>
             <polygon points="2 19 11 12 2 19"></polygon>
           </svg>
         </div>
         <div class="brand-info">
-          <span class="brand-title">Velocity</span>
-          <span class="brand-subtitle">Playback Controls</span>
+          <span class="brand-title">VELOCITY<span class="brand-accent">X</span></span>
+          <span class="brand-subtitle">CONTROL SYSTEM</span>
         </div>
       </div>
 
-      <nav class="nav-menu">
-        <button class="nav-item active" data-tab="general">
-          <span class="nav-icon">⚙️</span>
+      <nav class="nav-menu" role="tablist">
+        <button class="nav-item active" data-tab="general" role="tab">
+          <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
           <span>General</span>
         </button>
-        <button class="nav-item" data-tab="shortcuts">
-          <span class="nav-icon">⌨️</span>
+        <button class="nav-item" data-tab="shortcuts" role="tab">
+          <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+            <line x1="6" y1="8" x2="6.01" y2="8"></line>
+            <line x1="10" y1="8" x2="10.01" y2="8"></line>
+            <line x1="14" y1="8" x2="14.01" y2="8"></line>
+            <line x1="18" y1="8" x2="18.01" y2="8"></line>
+            <line x1="6" y1="12" x2="6.01" y2="12"></line>
+            <line x1="18" y1="12" x2="18.01" y2="12"></line>
+            <line x1="7" y1="16" x2="17" y2="16"></line>
+          </svg>
           <span>Shortcuts</span>
         </button>
-        <button class="nav-item" data-tab="controller">
-          <span class="nav-icon">🎛️</span>
+        <button class="nav-item" data-tab="controller" role="tab">
+          <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
           <span>Controller Overlay</span>
         </button>
-        <button class="nav-item" data-tab="sites">
-          <span class="nav-icon">🌐</span>
+        <button class="nav-item" data-tab="sites" role="tab">
+          <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
           <span>Site Rules</span>
         </button>
-        <button class="nav-item" data-tab="advanced">
-          <span class="nav-icon">🛡️</span>
+        <button class="nav-item" data-tab="advanced" role="tab">
+          <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
           <span>Advanced</span>
         </button>
       </nav>
 
       <div class="sidebar-footer">
-        <span>Velocity v1.0.0</span>
-        <span class="privacy-note">Privacy First — 100% Offline</span>
+        <div class="engine-badge">
+          <span class="pulse-dot"></span>
+          <span>ENGINE v1.0.0</span>
+        </div>
+        <span class="privacy-note">Zero Telemetry • Offline First</span>
       </div>
     </aside>
 
-    <!-- Content Panels -->
+    <!-- Main Workspace -->
     <main class="main-content">
-      <!-- Toast notification -->
-      <div id="save-toast" class="toast">Settings saved</div>
+      <!-- Floating Toast Notification -->
+      <div id="save-toast" class="toast">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>Settings Saved Successfully</span>
+      </div>
 
       <!-- Tab 1: General -->
       <section id="panel-general" class="tab-panel active">
-        <div class="panel-header">
+        <header class="panel-header">
+          <div class="section-tag">01 / CORE PARAMETERS</div>
           <h2>General Settings</h2>
-          <p class="panel-desc">Configure default playback speeds, adjustment steps, and behavior.</p>
-        </div>
+          <p class="panel-desc">Configure default playback speeds, rate stepping granularity, and media behavior.</p>
+        </header>
 
         <div class="settings-card">
           <div class="setting-item">
             <div class="setting-text">
-              <label for="ext-enabled">Extension Enabled</label>
-              <span class="hint">Enable or disable media controls universally.</span>
+              <label for="ext-enabled">Engine Enabled</label>
+              <span class="hint">Globally enable or pause media rate controls and overlay injection.</span>
             </div>
             <label class="switch">
               <input type="checkbox" id="ext-enabled">
@@ -79,31 +110,40 @@
           <div class="setting-item">
             <div class="setting-text">
               <label for="default-speed">Default Speed</label>
-              <span class="hint">Initial playback speed for newly opened media (0.07× – 16×).</span>
+              <span class="hint">Initial playback rate applied to newly mounted media elements (0.07× – 16.0×).</span>
             </div>
-            <input type="number" id="default-speed" step="0.05" min="0.07" max="16" class="num-input">
+            <div class="num-wrapper">
+              <input type="number" id="default-speed" step="0.05" min="0.07" max="16" class="num-input">
+              <span class="num-unit">×</span>
+            </div>
           </div>
 
           <div class="setting-item">
             <div class="setting-text">
-              <label for="speed-step">Speed Step</label>
-              <span class="hint">Amount added or subtracted on each speed up/down action.</span>
+              <label for="speed-step">Step Granularity</label>
+              <span class="hint">Rate increment/decrement per shortcut press (recommended 0.10×).</span>
             </div>
-            <input type="number" id="speed-step" step="0.05" min="0.01" max="2" class="num-input">
+            <div class="num-wrapper">
+              <input type="number" id="speed-step" step="0.05" min="0.01" max="2" class="num-input">
+              <span class="num-unit">×</span>
+            </div>
           </div>
 
           <div class="setting-item">
             <div class="setting-text">
-              <label for="preferred-speed">Preferred Speed</label>
-              <span class="hint">Target rate when pressing the preferred speed toggle shortcut.</span>
+              <label for="preferred-speed">Preferred Quick Speed</label>
+              <span class="hint">Target speed toggled via KeyG shortcut (e.g. 1.80× or 2.00×).</span>
             </div>
-            <input type="number" id="preferred-speed" step="0.1" min="0.07" max="16" class="num-input">
+            <div class="num-wrapper">
+              <input type="number" id="preferred-speed" step="0.1" min="0.07" max="16" class="num-input">
+              <span class="num-unit">×</span>
+            </div>
           </div>
 
           <div class="setting-item">
             <div class="setting-text">
               <label for="remember-speed">Remember Playback Speed</label>
-              <span class="hint">Keep and restore the last chosen speed across videos and sessions.</span>
+              <span class="hint">Persist chosen rate across subsequent videos and browser sessions.</span>
             </div>
             <label class="switch">
               <input type="checkbox" id="remember-speed">
@@ -113,15 +153,30 @@
 
           <div class="setting-item">
             <div class="setting-text">
-              <label for="rewind-sec">Rewind Duration</label>
-              <span class="hint">Seconds to jump backwards.</span>
+              <label for="rewind-sec">Rewind Step</label>
+              <span class="hint">Seconds to jump backwards on KeyZ shortcut.</span>
             </div>
-            <input type="number" id="rewind-sec" min="1" max="120" class="num-input">
+            <div class="num-wrapper">
+              <input type="number" id="rewind-sec" min="1" max="120" class="num-input">
+              <span class="num-unit">s</span>
+            </div>
           </div>
+
           <div class="setting-item">
             <div class="setting-text">
-              <label for="audio-support">Audio Support</label>
-              <span class="hint">Show and apply speed controls to &lt;audio&gt; elements as well.</span>
+              <label for="advance-sec">Forward Step</label>
+              <span class="hint">Seconds to jump forward on KeyX shortcut.</span>
+            </div>
+            <div class="num-wrapper">
+              <input type="number" id="advance-sec" min="1" max="120" class="num-input">
+              <span class="num-unit">s</span>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-text">
+              <label for="audio-support">Audio Element Support</label>
+              <span class="hint">Detect and bind controls to standalone &lt;audio&gt; streams and podcasts.</span>
             </div>
             <label class="switch">
               <input type="checkbox" id="audio-support">
@@ -131,38 +186,31 @@
 
           <div class="setting-item">
             <div class="setting-text">
-              <label for="start-hidden">Hide Controller by Default</label>
-              <span class="hint">Keep controller overlay hidden until toggled via shortcut (V).</span>
+              <label for="start-hidden">Start In Stealth Mode</label>
+              <span class="hint">Keep on-screen overlay hidden until explicitly toggled with shortcut (KeyV).</span>
             </div>
             <label class="switch">
               <input type="checkbox" id="start-hidden">
               <span class="slider"></span>
             </label>
           </div>
-
-          <div class="setting-item">
-            <div class="setting-text">
-              <label for="advance-sec">Forward Duration</label>
-              <span class="hint">Seconds to jump forwards.</span>
-            </div>
-            <input type="number" id="advance-sec" min="1" max="120" class="num-input">
-          </div>
         </div>
       </section>
 
       <!-- Tab 2: Shortcuts -->
       <section id="panel-shortcuts" class="tab-panel">
-        <div class="panel-header">
+        <header class="panel-header">
+          <div class="section-tag">02 / KEY BINDINGS</div>
           <h2>Keyboard Shortcuts</h2>
-          <p class="panel-desc">Customize key bindings. Shortcuts automatically avoid stealing input while typing.</p>
-        </div>
+          <p class="panel-desc">Fine-grained transport shortcuts. Inputs and search fields are automatically protected.</p>
+        </header>
 
         <div class="settings-card">
           <table class="shortcuts-table">
             <thead>
               <tr>
-                <th>Action</th>
-                <th>Shortcut</th>
+                <th>Command Action</th>
+                <th>Hardware Trigger</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -172,23 +220,24 @@
           </table>
 
           <div class="card-footer">
-            <button id="reset-shortcuts-btn" class="btn secondary">Reset Shortcuts to Defaults</button>
+            <button id="reset-shortcuts-btn" class="btn secondary">Restore Factory Keymap</button>
           </div>
         </div>
       </section>
 
       <!-- Tab 3: Controller Overlay -->
       <section id="panel-controller" class="tab-panel">
-        <div class="panel-header">
+        <header class="panel-header">
+          <div class="section-tag">03 / HUD OVERLAY</div>
           <h2>Controller Overlay</h2>
-          <p class="panel-desc">Customize appearance and positioning of the on-screen media pill.</p>
-        </div>
+          <p class="panel-desc">Customize transparency, position ratio, and visual styling of the floating HUD pill.</p>
+        </header>
 
         <div class="settings-card">
           <div class="setting-item">
             <div class="setting-text">
-              <label for="overlay-enabled">Show In-Video Controller</label>
-              <span class="hint">Render the draggable speed pill directly over videos.</span>
+              <label for="overlay-enabled">Inject Controller HUD</label>
+              <span class="hint">Mount floating draggable speed pill directly inside video player containers.</span>
             </div>
             <label class="switch">
               <input type="checkbox" id="overlay-enabled">
@@ -198,27 +247,27 @@
 
           <div class="setting-item">
             <div class="setting-text">
-              <label for="overlay-opacity">Overlay Opacity</label>
-              <span class="hint">Adjust transparency of the pill overlay.</span>
+              <label for="overlay-opacity">HUD Opacity</label>
+              <span class="hint">Resting opacity of the controller when not hovered.</span>
             </div>
             <div class="slider-control">
               <input type="range" id="overlay-opacity" min="0.2" max="1.0" step="0.05">
-              <span id="opacity-val">90%</span>
+              <span id="opacity-val" class="slider-val">90%</span>
             </div>
           </div>
 
           <div class="setting-item">
             <div class="setting-text">
-              <label>Controller Position</label>
-              <span class="hint">Reset pill coordinates back to top-left corner.</span>
+              <label>Pill Coordinates</label>
+              <span class="hint">Reset draggable overlay back to top-left anchor position.</span>
             </div>
-            <button id="reset-position-btn" class="btn secondary">Reset Position</button>
+            <button id="reset-position-btn" class="btn secondary">Reset Origin</button>
           </div>
 
           <div class="setting-group">
-            <label for="custom-css">Custom Overlay CSS</label>
-            <span class="hint">Advanced CSS applied directly inside the Shadow DOM shell.</span>
-            <textarea id="custom-css" rows="4" placeholder="/* e.g. .velocity-pill { border-radius: 4px; } */"></textarea>
+            <label for="custom-css">Shadow DOM Custom CSS</label>
+            <span class="hint">Injected directly into closed Shadow DOM. Override fonts, colors, or transitions.</span>
+            <textarea id="custom-css" rows="4" placeholder="/* e.g. .velocity-pill { border-radius: 4px; font-weight: 600; } */"></textarea>
             <div class="btn-row">
               <button id="reset-css-btn" class="btn secondary">Clear Custom CSS</button>
             </div>
@@ -228,27 +277,28 @@
 
       <!-- Tab 4: Site Rules -->
       <section id="panel-sites" class="tab-panel">
-        <div class="panel-header">
-          <h2>Per-Site Rules</h2>
-          <p class="panel-desc">Configure custom default speeds or disable controls for specific domains.</p>
-        </div>
+        <header class="panel-header">
+          <div class="section-tag">04 / SITE RULES</div>
+          <h2>Per-Site Overrides</h2>
+          <p class="panel-desc">Define custom default playback rates or selectively bypass specific domains.</p>
+        </header>
 
         <!-- Add rule form -->
         <div class="settings-card">
-          <h3>Add Site Rule</h3>
+          <h3 class="card-title">New Domain Rule</h3>
           <div class="add-rule-form">
             <div class="form-field">
-              <label for="new-rule-domain">Domain Pattern</label>
+              <label for="new-rule-domain">Target Domain / Glob</label>
               <input type="text" id="new-rule-domain" placeholder="e.g. *.coursera.org or youtube.com">
             </div>
             <div class="form-field">
               <label for="new-rule-speed">Default Speed</label>
-              <input type="number" id="new-rule-speed" step="0.05" min="0.07" max="16" placeholder="1.5">
+              <input type="number" id="new-rule-speed" step="0.05" min="0.07" max="16" placeholder="1.50">
             </div>
             <div class="form-field check-field">
-              <label>
+              <label class="inline-checkbox">
                 <input type="checkbox" id="new-rule-enabled" checked>
-                <span>Enabled</span>
+                <span>Active</span>
               </label>
             </div>
             <button id="add-rule-btn" class="btn primary">Add Rule</button>
@@ -257,14 +307,14 @@
 
         <!-- Existing rules table -->
         <div class="settings-card">
-          <h3>Configured Rules</h3>
+          <h3 class="card-title">Configured Rules</h3>
           <table class="rules-table">
             <thead>
               <tr>
-                <th>Domain</th>
-                <th>Default Speed</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>Domain Pattern</th>
+                <th>Playback Rate</th>
+                <th>Engine Status</th>
+                <th>Operation</th>
               </tr>
             </thead>
             <tbody id="rules-body">
@@ -276,16 +326,17 @@
 
       <!-- Tab 5: Advanced -->
       <section id="panel-advanced" class="tab-panel">
-        <div class="panel-header">
+        <header class="panel-header">
+          <div class="section-tag">05 / ADVANCED ENGINE</div>
           <h2>Advanced Settings</h2>
-          <p class="panel-desc">Engine compatibility, configuration backup, and maintenance.</p>
-        </div>
+          <p class="panel-desc">Rate arbitration circuit breakers, diagnostic profiles, and configuration backups.</p>
+        </header>
 
         <div class="settings-card">
           <div class="setting-item">
             <div class="setting-text">
-              <label for="fight-resets">Fight Automatic Rate Resets</label>
-              <span class="hint">Intelligently restore desired playback rate when players attempt silent resets.</span>
+              <label for="fight-resets">Automatic Rate Reset Arbitration</label>
+              <span class="hint">Neutralize hostile site scripts that silently revert playback rate back to 1.0×.</span>
             </div>
             <label class="switch">
               <input type="checkbox" id="fight-resets">
@@ -295,8 +346,8 @@
 
           <div class="setting-item">
             <div class="setting-text">
-              <label>Backup & Restore</label>
-              <span class="hint">Export or import your complete configuration as JSON.</span>
+              <label>Configuration Backup</label>
+              <span class="hint">Export or restore your settings, custom shortcuts, and domain rules as JSON.</span>
             </div>
             <div class="btn-group">
               <button id="export-settings-btn" class="btn secondary">Export JSON</button>
@@ -309,10 +360,10 @@
 
           <div class="setting-item danger-zone">
             <div class="setting-text">
-              <label>Factory Reset</label>
-              <span class="hint">Erase all custom shortcuts, rules, and restore factory defaults.</span>
+              <label class="danger-title">Factory Reset</label>
+              <span class="hint">Completely purge stored state and restore original defaults.</span>
             </div>
-            <button id="factory-reset-btn" class="btn danger">Reset All Settings</button>
+            <button id="factory-reset-btn" class="btn danger">Purge & Reset All</button>
           </div>
         </div>
       </section>
