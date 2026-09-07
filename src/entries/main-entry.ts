@@ -166,6 +166,11 @@ class VelocityMainRuntime {
       case "pip.toggle":
         toast.show("Picture-in-Picture", "🖼️");
         break;
+      case "silence.skip.toggle": {
+        const enabled = targetController ? targetController.silenceSkipEnabled : false;
+        toast.show(enabled ? "Silence Skip On" : "Silence Skip Off", "⏩");
+        break;
+      }
     }
   }
 

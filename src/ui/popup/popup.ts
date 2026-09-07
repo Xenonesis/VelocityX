@@ -146,6 +146,11 @@ function setupEventListeners() {
     currentSettings.overlay.enabled = checked;
     await saveSettings();
   });
+
+  document.getElementById("silence-skip-toggle")?.addEventListener("change", async (e) => {
+    const checked = (e.target as HTMLInputElement).checked;
+    await sendActionToTab({ type: "silence.skip.toggle", enabled: checked });
+  });
 }
 
 async function saveSettings() {

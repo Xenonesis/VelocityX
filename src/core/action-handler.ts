@@ -16,7 +16,8 @@ export type MediaAction =
   | { type: "audio.boost.decrease"; step?: number }
   | { type: "audio.boost.set"; value: number }
   | { type: "pitch.toggle" }
-  | { type: "pip.toggle" };
+  | { type: "pip.toggle" }
+  | { type: "silence.skip.toggle"; enabled?: boolean };
 
 export interface ActionHandlerCallbacks {
   onOverlayToggle?: () => void;
@@ -86,6 +87,9 @@ export class ActionHandler {
         break;
       case "pip.toggle":
         controller.togglePictureInPicture().catch(() => {});
+        break;
+      case "silence.skip.toggle":
+        controller.toggleSilenceSkip(action.enabled);
         break;
       default:
         return false;

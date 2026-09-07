@@ -113,6 +113,16 @@ export const DEFAULT_SHORTCUTS: ShortcutBinding[] = [
     meta: false,
     enabled: true,
   },
+  {
+    id: "silence.skip.toggle",
+    action: { type: "silence.skip.toggle" },
+    code: "KeyK",
+    ctrl: false,
+    alt: false,
+    shift: false,
+    meta: false,
+    enabled: true,
+  },
 ];
 
 export function isEditableTarget(target: EventTarget | null): boolean {

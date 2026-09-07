@@ -10,6 +10,7 @@ import {
 import { clamp } from "../utils/clamp";
 import { isLiveMedia } from "../utils/media";
 import { AudioBooster, setMediaPreservesPitch } from "../utils/audio-boost";
+import { SilenceDetector } from "../utils/silence-detector";
 export interface MediaControllerEvents {
   onRateChange?: (controller: MediaController, rate: number, source: RateSource) => void;
   onStateChange?: (controller: MediaController) => void;
@@ -22,6 +23,9 @@ export class MediaController {
   private readonly events: MediaControllerEvents;
   private readonly audioBooster: AudioBooster;
   preservesPitch = true;
+  silenceSkipEnabled = false;
+  private silenceDetector: SilenceDetector | null = null;
+  private rateBeforeSilence: number | null = null;
   desiredRate: number;
   observedRate: number;
   lastSource: RateSource = "initial";
@@ -243,6 +247,42 @@ export class MediaController {
       return false;
     }
   }
+
+  toggleSilenceSkip(force?: boolean): boolean {
+    if (this.destroyed) return this.silenceSkipEnabled;
+    this.lastInteractionAt = Date.now();
+    this.silenceSkipEnabled = force ?? !this.silenceSkipEnabled;
+
+    if (this.silenceSkipEnabled) {
+      if (!this.silenceDetector) {
+        this.silenceDetector = new SilenceDetector(this.media, {
+          onSilenceChange: (isSilent) => {
+            if (this.destroyed || !this.silenceSkipEnabled) return;
+            if (isSilent) {
+              if (this.rateBeforeSilence === null) {
+                this.rateBeforeSilence = this.desiredRate;
+              }
+              this.setRate(Math.max(this.desiredRate, 3.0), "extension");
+            } else if (this.rateBeforeSilence !== null) {
+              const restore = this.rateBeforeSilence;
+              this.rateBeforeSilence = null;
+              this.setRate(restore, "extension");
+            }
+          },
+        });
+      }
+      this.silenceDetector.start();
+    } else {
+      this.silenceDetector?.stop();
+      if (this.rateBeforeSilence !== null) {
+        const restore = this.rateBeforeSilence;
+        this.rateBeforeSilence = null;
+        this.setRate(restore, "extension");
+      }
+    }
+
+    return this.silenceSkipEnabled;
+  }
   /**
    * Complete deterministic teardown of all event listeners and timers.
    */
@@ -251,6 +291,7 @@ export class MediaController {
     this.destroyed = true;
     this.abortController.abort();
     this.audioBooster.destroy();
+    this.silenceDetector?.destroy();
     this.events.onDestroy?.(this);
   }
 }

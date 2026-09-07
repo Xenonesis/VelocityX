@@ -12,7 +12,7 @@ export function generateManifest(target: TargetBrowser, options: ManifestOptions
     name: "Velocity — Video Speed Controller",
     version,
     description: "Fine-grained playback controls, custom shortcuts, and intelligent speed arbitration for HTML5 video and audio.",
-    permissions: ["storage"],
+    permissions: ["storage", "contextMenus"],
     icons: {
       "16": "assets/icons/icon-16.png",
       "48": "assets/icons/icon-48.png",
