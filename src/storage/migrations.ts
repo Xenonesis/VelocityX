@@ -48,6 +48,17 @@ export function migrateSettings(raw: unknown): SettingsV1 {
     settings.lastSpeed = clamp(normalizeRate(data.lastSpeed), MIN_SPEED, MAX_SPEED);
   }
 
+  if (data.domainSpeeds && typeof data.domainSpeeds === "object") {
+    const speeds = data.domainSpeeds as Record<string, unknown>;
+    const validMap: Record<string, number> = {};
+    for (const [domain, spd] of Object.entries(speeds)) {
+      if (typeof spd === "number" && Number.isFinite(spd)) {
+        validMap[domain] = clamp(normalizeRate(spd), MIN_SPEED, MAX_SPEED);
+      }
+    }
+    settings.domainSpeeds = validMap;
+  }
+
   // Overlay validation
   if (data.overlay && typeof data.overlay === "object") {
     const ov = data.overlay as Record<string, unknown>;

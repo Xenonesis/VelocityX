@@ -103,6 +103,16 @@ export const DEFAULT_SHORTCUTS: ShortcutBinding[] = [
     meta: false,
     enabled: true,
   },
+  {
+    id: "pip.toggle",
+    action: { type: "pip.toggle" },
+    code: "KeyP",
+    ctrl: false,
+    alt: false,
+    shift: false,
+    meta: false,
+    enabled: true,
+  },
 ];
 
 export function isEditableTarget(target: EventTarget | null): boolean {

@@ -43,11 +43,19 @@ class IsolatedBridge {
 
   private bindPageListeners(): void {
     // Listen for requests from MAIN world to save lastSpeed
+    // Listen for requests from MAIN world to save lastSpeed and domain speed
     window.addEventListener("velocity:storage:save-last-speed", (e: Event) => {
-      const customEvt = e as CustomEvent<{ speed: number }>;
+      const customEvt = e as CustomEvent<{ speed: number; domain?: string }>;
       const speed = customEvt.detail?.speed;
+      const domain = customEvt.detail?.domain;
       if (typeof speed === "number" && Number.isFinite(speed)) {
         this.currentSettings.lastSpeed = speed;
+        if (domain) {
+          if (!this.currentSettings.domainSpeeds) {
+            this.currentSettings.domainSpeeds = {};
+          }
+          this.currentSettings.domainSpeeds[domain.toLowerCase()] = speed;
+        }
         this.debounceSave();
       }
     });

@@ -84,8 +84,12 @@ export class SiteRuleEngine {
     // 2. Remembered last speed (if rememberSpeed is true)
     // 3. Global default speed
     let initialSpeed = this.settings.defaultSpeed;
-    if (rememberSpeed && typeof this.settings.lastSpeed === "number") {
-      initialSpeed = this.settings.lastSpeed;
+    if (rememberSpeed) {
+      if (this.settings.domainSpeeds && typeof this.settings.domainSpeeds[hostname] === "number") {
+        initialSpeed = this.settings.domainSpeeds[hostname];
+      } else if (typeof this.settings.lastSpeed === "number") {
+        initialSpeed = this.settings.lastSpeed;
+      }
     }
     if (rule && typeof rule.defaultSpeed === "number") {
       initialSpeed = rule.defaultSpeed;

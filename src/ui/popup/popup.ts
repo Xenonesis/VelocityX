@@ -114,12 +114,24 @@ function setupEventListeners() {
     await sendActionToTab({ type: "speed.increase", step: currentSettings.speedStep });
   });
 
-  const presetButtons = document.querySelectorAll<HTMLButtonElement>(".preset-btn");
+  const presetButtons = document.querySelectorAll<HTMLButtonElement>(".preset-btn[data-speed]");
   presetButtons.forEach((btn) => {
     btn.addEventListener("click", async () => {
       const speed = parseFloat(btn.dataset.speed || "1.0");
       updateSpeedDisplay(speed);
       await sendActionToTab({ type: "speed.set", value: speed });
+    });
+  });
+
+  const boostButtons = document.querySelectorAll<HTMLButtonElement>(".boost-btn[data-boost]");
+  const boostDisplay = document.getElementById("boost-display");
+  boostButtons.forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const boost = parseFloat(btn.dataset.boost || "1.0");
+      if (boostDisplay) {
+        boostDisplay.textContent = `${Math.round(boost * 100)}%`;
+      }
+      await sendActionToTab({ type: "audio.boost.set", value: boost });
     });
   });
 

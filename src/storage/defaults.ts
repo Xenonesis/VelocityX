@@ -20,6 +20,7 @@ export const DEFAULT_SETTINGS: SettingsV1 = {
   audioBoolean: true,
   startHidden: false,
   lastSpeed: NORMAL_SPEED,
+  domainSpeeds: {},
   overlay: {
     enabled: true,
     position: {

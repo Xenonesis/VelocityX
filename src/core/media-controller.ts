@@ -9,7 +9,7 @@ import {
 } from "./constants";
 import { clamp } from "../utils/clamp";
 import { isLiveMedia } from "../utils/media";
-
+import { AudioBooster, setMediaPreservesPitch } from "../utils/audio-boost";
 export interface MediaControllerEvents {
   onRateChange?: (controller: MediaController, rate: number, source: RateSource) => void;
   onStateChange?: (controller: MediaController) => void;
@@ -20,7 +20,8 @@ export class MediaController {
   readonly media: HTMLMediaElement;
   private readonly abortController = new AbortController();
   private readonly events: MediaControllerEvents;
-
+  private readonly audioBooster: AudioBooster;
+  preservesPitch = true;
   desiredRate: number;
   observedRate: number;
   lastSource: RateSource = "initial";
@@ -34,7 +35,8 @@ export class MediaController {
   constructor(media: HTMLMediaElement, initialRate = NORMAL_SPEED, events: MediaControllerEvents = {}) {
     this.media = media;
     this.events = events;
-
+    this.audioBooster = new AudioBooster(media);
+    setMediaPreservesPitch(media, true);
     const rate = clamp(normalizeRate(initialRate), MIN_SPEED, MAX_SPEED);
     this.desiredRate = rate;
     this.observedRate = media.playbackRate;
@@ -196,6 +198,51 @@ export class MediaController {
     }
   }
 
+
+  getAudioGain(): number {
+    return this.audioBooster.getGain();
+  }
+
+  setAudioGain(multiplier: number): void {
+    if (this.destroyed) return;
+    this.lastInteractionAt = Date.now();
+    this.audioBooster.setGain(multiplier);
+  }
+
+  increaseAudioGain(step = 0.2): void {
+    this.setAudioGain(this.audioBooster.getGain() + step);
+  }
+
+  decreaseAudioGain(step = 0.2): void {
+    this.setAudioGain(this.audioBooster.getGain() - step);
+  }
+
+  togglePitch(): boolean {
+    if (this.destroyed) return this.preservesPitch;
+    this.lastInteractionAt = Date.now();
+    this.preservesPitch = !this.preservesPitch;
+    setMediaPreservesPitch(this.media, this.preservesPitch);
+    return this.preservesPitch;
+  }
+
+  async togglePictureInPicture(): Promise<boolean> {
+    if (this.destroyed) return false;
+    this.lastInteractionAt = Date.now();
+    if (!(this.media instanceof HTMLVideoElement)) return false;
+
+    try {
+      if (document.pictureInPictureElement === this.media) {
+        await document.exitPictureInPicture();
+        return false;
+      } else {
+        await this.media.requestPictureInPicture();
+        return true;
+      }
+    } catch (err) {
+      console.warn("[Velocity] PiP request failed:", err);
+      return false;
+    }
+  }
   /**
    * Complete deterministic teardown of all event listeners and timers.
    */
@@ -203,6 +250,7 @@ export class MediaController {
     if (this.destroyed) return;
     this.destroyed = true;
     this.abortController.abort();
+    this.audioBooster.destroy();
     this.events.onDestroy?.(this);
   }
 }

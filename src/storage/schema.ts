@@ -36,6 +36,7 @@ export interface SettingsV1 {
   audioBoolean?: boolean;
   startHidden?: boolean;
   lastSpeed: number;
+  domainSpeeds?: Record<string, number>;
   overlay: OverlaySettings;
   shortcuts: ShortcutBinding[];
   siteRules: SiteRule[];

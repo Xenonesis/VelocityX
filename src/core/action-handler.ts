@@ -11,7 +11,12 @@ export type MediaAction =
   | { type: "seek.relative"; seconds: number }
   | { type: "overlay.toggle" }
   | { type: "marker.set" }
-  | { type: "marker.jump" };
+  | { type: "marker.jump" }
+  | { type: "audio.boost.increase"; step?: number }
+  | { type: "audio.boost.decrease"; step?: number }
+  | { type: "audio.boost.set"; value: number }
+  | { type: "pitch.toggle" }
+  | { type: "pip.toggle" };
 
 export interface ActionHandlerCallbacks {
   onOverlayToggle?: () => void;
@@ -66,6 +71,21 @@ export class ActionHandler {
         break;
       case "marker.jump":
         controller.jumpToMarker();
+        break;
+      case "audio.boost.increase":
+        controller.increaseAudioGain(action.step ?? 0.2);
+        break;
+      case "audio.boost.decrease":
+        controller.decreaseAudioGain(action.step ?? 0.2);
+        break;
+      case "audio.boost.set":
+        controller.setAudioGain(action.value);
+        break;
+      case "pitch.toggle":
+        controller.togglePitch();
+        break;
+      case "pip.toggle":
+        controller.togglePictureInPicture().catch(() => {});
         break;
       default:
         return false;

@@ -9,7 +9,8 @@
     "dev": "tsx scripts/build.ts --watch",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "package": "npm run build && tsx scripts/package.ts"
   },
   "keywords": [
     "chrome-extension",

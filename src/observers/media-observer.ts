@@ -66,9 +66,21 @@ export class MediaObserver {
           this.callbacks.onMediaFound(descendant);
         }
       }
+
+      // Deep Shadow DOM discovery for custom web components
+      const allElements = node.querySelectorAll("*");
+      for (let i = 0; i < allElements.length; i++) {
+        const el = allElements[i];
+        if (el.shadowRoot) {
+          this.discoverMediaInSubtree(el.shadowRoot);
+        }
+      }
+    }
+
+    if (node instanceof Element && node.shadowRoot) {
+      this.discoverMediaInSubtree(node.shadowRoot);
     }
   }
-
   private handleRemovedSubtree(node: Node): void {
     if (isMediaElement(node)) {
       this.callbacks.onMediaRemoved?.(node);
@@ -82,6 +94,10 @@ export class MediaObserver {
           this.callbacks.onMediaRemoved?.(descendant);
         }
       }
+    }
+
+    if (node instanceof Element && node.shadowRoot) {
+      this.handleRemovedSubtree(node.shadowRoot);
     }
   }
 
