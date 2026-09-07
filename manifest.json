@@ -27,7 +27,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "matches": ["<all_urls>"],
       "all_frames": true,
       "match_about_blank": true,
       "exclude_matches": [
@@ -40,7 +40,7 @@
       "world": "ISOLATED"
     },
     {
-      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "matches": ["<all_urls>"],
       "all_frames": true,
       "match_about_blank": true,
       "exclude_matches": [
