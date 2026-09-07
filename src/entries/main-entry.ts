@@ -125,10 +125,12 @@ class VelocityMainRuntime {
 
   private handleMediaFound(media: HTMLMediaElement): void {
     if (this.mediaRegistry.get(media)) return;
+    if (media.tagName.toLowerCase() === "audio" && this.settings.audioBoolean === false) {
+      return;
+    }
 
     const siteConfig = this.siteRuleEngine.resolveSiteConfig(window.location);
     if (!siteConfig.enabled) return;
-
     const arbiter = new SpeedArbiter(
       siteConfig.initialSpeed,
       this.settings.compatibility.fightAutomaticRateReset
@@ -167,7 +169,10 @@ class VelocityMainRuntime {
 
     // Mount overlay if eligible
     if (siteConfig.overlayEnabled && this.isEligibleForOverlay(media)) {
-      this.mountOverlay(media, controller);
+      const overlay = this.mountOverlay(media, controller);
+      if (this.settings.startHidden && overlay) {
+        overlay.setVisible(false);
+      }
     }
   }
 
@@ -187,12 +192,12 @@ class VelocityMainRuntime {
     return true;
   }
 
-  private mountOverlay(media: HTMLMediaElement, controller: MediaController): void {
-    if (this.overlays.has(media)) return;
+  private mountOverlay(media: HTMLMediaElement, controller: MediaController): VelocityControllerElement | null {
+    if (this.overlays.has(media)) return this.overlays.get(media) ?? null;
 
     // Find closest container wrapper or parent node
     const container = (media.parentElement || media.parentNode) as HTMLElement | null;
-    if (!container) return;
+    if (!container) return null;
 
     // Ensure container has relative/absolute positioning context
     const computed = window.getComputedStyle(container);
@@ -205,6 +210,7 @@ class VelocityMainRuntime {
 
     overlay.attachController(controller, container, this.settings.overlay.position);
     this.overlays.set(media, overlay);
+    return overlay;
   }
 
   private toggleAllOverlays(): void {

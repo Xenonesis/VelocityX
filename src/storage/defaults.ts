@@ -17,6 +17,8 @@ export const DEFAULT_SETTINGS: SettingsV1 = {
   rewindSeconds: DEFAULT_REWIND_SECONDS,
   advanceSeconds: DEFAULT_ADVANCE_SECONDS,
   rememberPlaybackSpeed: false,
+  audioBoolean: true,
+  startHidden: false,
   lastSpeed: NORMAL_SPEED,
   overlay: {
     enabled: true,
@@ -24,11 +26,15 @@ export const DEFAULT_SETTINGS: SettingsV1 = {
       xRatio: 0.02,
       yRatio: 0.02,
     },
-    opacity: 0.9,
+    opacity: 0.3,
     customCss: "",
   },
   shortcuts: DEFAULT_SHORTCUTS,
-  siteRules: [],
+  siteRules: [
+    { id: "rule-meet", match: "meet.google.com", enabled: false },
+    { id: "rule-teams", match: "teams.microsoft.com", enabled: false },
+    { id: "rule-imgur", match: "imgur.com", enabled: false },
+  ],
   compatibility: {
     fightAutomaticRateReset: true,
   },

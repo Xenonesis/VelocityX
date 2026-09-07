@@ -25,6 +25,8 @@ export class MediaController {
   observedRate: number;
   lastSource: RateSource = "initial";
   markerTime: number | null = null;
+  positionBeforeJump: number | null = null;
+  previousRateBeforeReset: number | null = null;
   previousRateBeforePreferred: number | null = null;
   lastInteractionAt = Date.now();
   destroyed = false;
@@ -107,12 +109,23 @@ export class MediaController {
   }
 
   /**
-   * Resets rate to normal or specified reset target (default 1.0)
+   * Resets rate to normal or specified reset target (default 1.0).
+   * If already at target rate, toggles back to previous rate before reset.
    */
   resetRate(target = NORMAL_SPEED): void {
-    this.setRate(target, "extension");
+    const normTarget = clamp(normalizeRate(target), MIN_SPEED, MAX_SPEED);
+    if (this.desiredRate === normTarget) {
+      if (this.previousRateBeforeReset !== null) {
+        const restoreRate = this.previousRateBeforeReset;
+        this.previousRateBeforeReset = null;
+        this.setRate(restoreRate, "extension");
+        return;
+      }
+    } else {
+      this.previousRateBeforeReset = this.desiredRate;
+    }
+    this.setRate(normTarget, "extension");
   }
-
   /**
    * Seeks relative seconds (+ or -) with safety bounds and live stream detection.
    */
@@ -141,11 +154,23 @@ export class MediaController {
   }
 
   /**
-   * Jumps to saved marker time if set.
+   * Jumps to saved marker time if set. Toggles back to pre-jump position if already at marker.
    */
   jumpToMarker(): void {
     if (this.destroyed || this.markerTime === null) return;
     this.lastInteractionAt = Date.now();
+    const current = this.media.currentTime;
+    if (this.positionBeforeJump !== null && Math.abs(current - this.markerTime) < 0.5) {
+      const returnPos = this.positionBeforeJump;
+      this.positionBeforeJump = null;
+      try {
+        this.media.currentTime = returnPos;
+      } catch (err) {
+        console.warn("[Velocity] Failed to return from marker:", err);
+      }
+      return;
+    }
+    this.positionBeforeJump = current;
     try {
       this.media.currentTime = this.markerTime;
     } catch (err) {

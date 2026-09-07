@@ -36,17 +36,20 @@ describe("MediaController", () => {
     expect(video.playbackRate).toBe(0.9);
   });
 
-  it("resets rate to 1.0 or custom reset target", () => {
+  it("resets rate to 1.0 or custom reset target with toggle memory", () => {
     const video = createMockVideo();
     const ctrl = new MediaController(video, 2.5);
 
     ctrl.resetRate();
     expect(ctrl.desiredRate).toBe(1.0);
 
+    // Pressing reset again while at target toggles back to previous (2.5)
+    ctrl.resetRate();
+    expect(ctrl.desiredRate).toBe(2.5);
+
     ctrl.resetRate(1.25);
     expect(ctrl.desiredRate).toBe(1.25);
   });
-
   it("toggles preferred rate back and forth", () => {
     const video = createMockVideo();
     const ctrl = new MediaController(video, 1.25);
@@ -79,20 +82,22 @@ describe("MediaController", () => {
     ctrl.seekBy(200);
     expect(video.currentTime).toBe(120);
   });
-
-  it("sets and jumps to marker", () => {
+  it("saves temporal marker and jumps to it with position toggle", () => {
     const video = createMockVideo();
-    video.currentTime = 42.5;
+    video.currentTime = 35;
     const ctrl = new MediaController(video);
 
     ctrl.setMarker();
-    expect(ctrl.markerTime).toBe(42.5);
+    expect(ctrl.markerTime).toBe(35);
 
-    video.currentTime = 90;
+    video.currentTime = 80;
     ctrl.jumpToMarker();
-    expect(video.currentTime).toBe(42.5);
-  });
+    expect(video.currentTime).toBe(35);
 
+    // Jumping again while at marker toggles back to pre-jump position (80)
+    ctrl.jumpToMarker();
+    expect(video.currentTime).toBe(80);
+  });
   it("cleans up event listeners completely on destroy", () => {
     const video = createMockVideo();
     const onRateChange = vi.fn();

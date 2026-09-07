@@ -54,7 +54,8 @@ function populateForm() {
   setCheck("remember-speed", settings.rememberPlaybackSpeed);
   setNum("rewind-sec", settings.rewindSeconds);
   setNum("advance-sec", settings.advanceSeconds);
-
+  setCheck("audio-support", settings.audioBoolean ?? true);
+  setCheck("start-hidden", settings.startHidden ?? false);
   // Controller
   setCheck("overlay-enabled", settings.overlay.enabled);
   const opacityRange = document.getElementById("overlay-opacity") as HTMLInputElement | null;
@@ -196,7 +197,8 @@ function setupEventListeners() {
   bindCheck("remember-speed", (val) => (settings.rememberPlaybackSpeed = val));
   bindNum("rewind-sec", (val) => (settings.rewindSeconds = val));
   bindNum("advance-sec", (val) => (settings.advanceSeconds = val));
-
+  bindCheck("audio-support", (val) => (settings.audioBoolean = val));
+  bindCheck("start-hidden", (val) => (settings.startHidden = val));
   // Controller
   bindCheck("overlay-enabled", (val) => (settings.overlay.enabled = val));
 

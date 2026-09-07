@@ -51,6 +51,82 @@ describe("Overlay UI & VelocityControllerElement", () => {
     overlay.destroy();
   });
 
+  it("renders rate badge on the left followed by controls on the right", () => {
+    const overlay = new VelocityControllerElement();
+    container.appendChild(overlay);
+    overlay.attachController(controller, container);
+
+    // @ts-expect-error - internal pillElem inspection
+    const pill = overlay.pillElem as HTMLDivElement;
+    expect(pill.id).toBe("controller");
+    expect(pill.children.length).toBe(2);
+
+    // Child 0 is rateBadge (.draggable)
+    expect(pill.children[0].className).toContain("draggable");
+    // Child 1 is controlsGroup (#controls)
+    expect(pill.children[1].id).toBe("controls");
+
+    const buttons = pill.children[1].querySelectorAll("button");
+    const actions = Array.from(buttons).map((b) => b.getAttribute("data-action"));
+    expect(actions).toEqual(["rewind", "slower", "faster", "advance", "close"]);
+
+    overlay.destroy();
+  });
+
+  it("resets rate on rateBadge double-click", () => {
+    const overlay = new VelocityControllerElement();
+    container.appendChild(overlay);
+    controller.setRate(2.5);
+    overlay.attachController(controller, container);
+
+    expect(controller.desiredRate).toBe(2.5);
+
+    // @ts-expect-error - internal rateBadge
+    overlay.rateBadge.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    expect(controller.desiredRate).toBe(1.0);
+
+    overlay.destroy();
+  });
+
+  it("adjusts speed on mouse wheel event after hover dwell gate", () => {
+    const overlay = new VelocityControllerElement();
+    container.appendChild(overlay);
+    controller.setRate(1.0);
+    overlay.attachController(controller, container);
+
+    // @ts-expect-error - internal pillElem
+    const pill = overlay.pillElem as HTMLDivElement;
+
+    // Enter hover
+    pill.dispatchEvent(new MouseEvent("mouseenter"));
+    // @ts-expect-error - simulate dwell timestamp
+    overlay.hoverStart = performance.now() - 400; // > 300ms
+
+    // Wheel up: increases speed
+    pill.dispatchEvent(
+      new WheelEvent("wheel", {
+        deltaY: -100,
+        deltaMode: WheelEvent.DOM_DELTA_PIXEL,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    expect(controller.desiredRate).toBe(1.1);
+
+    // Wheel down: decreases speed
+    pill.dispatchEvent(
+      new WheelEvent("wheel", {
+        deltaY: 100,
+        deltaMode: WheelEvent.DOM_DELTA_PIXEL,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    expect(controller.desiredRate).toBe(1.0);
+
+    overlay.destroy();
+  });
+
   it("handles overlay visibility toggling", () => {
     const overlay = new VelocityControllerElement();
     container.appendChild(overlay);

@@ -8,9 +8,9 @@ const OVERLAY_STYLE = `
   display: block !important;
   position: absolute !important;
   z-index: 2147483647 !important;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-  font-size: 15px !important;
-  line-height: 1 !important;
+  font-family: sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.8em !important;
   user-select: none !important;
   -webkit-user-select: none !important;
   pointer-events: auto !important;
@@ -21,95 +21,135 @@ const OVERLAY_STYLE = `
   display: none !important;
 }
 
-.velocity-pill {
+#controller {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 2px 4px;
-  background-color: transparent;
-  border: none;
-  border-radius: 4px;
-  color: rgba(255, 255, 255, 0.72);
-  cursor: grab;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: black;
+  color: white;
+  border-radius: 6px;
+  padding: 4px;
+  margin: 10px 10px 10px 15px;
+  cursor: default;
+  white-space: nowrap;
+  opacity: 0.3;
   box-sizing: border-box;
-  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-.velocity-pill:hover,
-.velocity-pill.expanded,
-.velocity-pill.dragging {
-  background-color: rgba(0, 0, 0, 0.65);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-  color: #ffffff;
+#controller:hover,
+#controller.expanded,
+#controller.dragging {
+  opacity: 0.7 !important;
 }
 
-.velocity-pill.dragging {
+#controller.dragging {
   cursor: grabbing;
 }
 
-.rate-badge {
-  font-weight: 600;
-  font-size: 15px;
-  font-variant-numeric: tabular-nums;
-  color: rgba(255, 255, 255, 0.72);
-  padding: 1px 3px;
-  cursor: pointer;
-  white-space: nowrap;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
-  transition: color 0.2s ease, text-shadow 0.2s ease;
-}
-
-.velocity-pill:hover .rate-badge,
-.velocity-pill.expanded .rate-badge {
-  color: #ffffff;
-}
-
-.rate-badge.highlight {
-  color: #ffffff !important;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 1px 3px rgba(0, 0, 0, 0.9) !important;
-}
-
-.controls-group {
-  display: none;
-  align-items: center;
-  gap: 1px;
-}
-
-.velocity-pill:hover .controls-group,
-.velocity-pill.expanded .controls-group,
-.velocity-pill.dragging .controls-group {
-  display: inline-flex;
-}
-
-.ctrl-btn {
+.draggable {
+  cursor: grab;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 19px;
-  height: 19px;
-  padding: 0 2px;
-  background: transparent;
-  border: none;
-  border-radius: 3px;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 12px;
+  width: 2.8em;
+  height: 1.4em;
+  text-align: center;
+  vertical-align: middle;
+  box-sizing: border-box;
+  touch-action: none;
+  font-family: sans-serif;
+  font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  transition: background-color 0.1s ease, color 0.1s ease;
+  color: #ffffff;
+  padding: 0 2px;
+  transition: margin-right 0.2s ease;
 }
 
-.ctrl-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+.draggable:active {
+  cursor: grabbing;
+}
+
+#controller:hover > .draggable,
+#controller.expanded > .draggable {
+  margin-right: 0.5em;
+}
+
+#controls {
+  display: none;
+  vertical-align: middle;
+  align-items: center;
+  gap: 2px;
+}
+
+#controller:hover #controls,
+#controller.expanded #controls,
+#controller.dragging #controls {
+  display: inline-flex;
+}
+
+button.ctrl-btn {
+  opacity: 1;
+  cursor: pointer;
+  color: black;
+  background: white;
+  font-weight: normal;
+  border-radius: 5px;
+  padding: 1px 5px 2px 5px;
+  font-size: 13px;
+  line-height: 16px;
+  border: 0px solid white;
+  font-family: "Lucida Console", Monaco, monospace;
+  margin: 0px 2px;
+  transition: background 0.15s ease, color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+button.ctrl-btn:focus {
+  outline: 0;
+}
+
+button.ctrl-btn:hover {
+  opacity: 1;
+  background: #2196f3;
   color: #ffffff;
 }
 
-.ctrl-btn:focus-visible {
-  outline: 1px solid rgba(255, 255, 255, 0.8);
+button.ctrl-btn:active {
+  background: #1976d2;
+  color: #ffffff;
+  font-weight: bold;
 }
 
-.ctrl-btn:active {
-  transform: scale(0.92);
+button.ctrl-btn.rw {
+  opacity: 0.65;
+}
+
+button.ctrl-btn.rw:hover {
+  opacity: 1;
+}
+
+button.ctrl-btn.close-btn {
+  font-size: 14px;
+  padding: 1px 6px;
+  opacity: 0.75;
+}
+
+button.ctrl-btn.close-btn:hover {
+  background: #e53935;
+  color: #ffffff;
+  opacity: 1;
+}
+
+.rate-badge.highlight {
+  color: #64b5f6 !important;
+  text-shadow: 0 0 8px rgba(100, 181, 246, 0.9) !important;
 }
 `;
 
@@ -117,11 +157,13 @@ export class VelocityControllerElement extends HTMLElement {
   private readonly shadow: ShadowRoot;
   private pillElem!: HTMLDivElement;
   private rateBadge!: HTMLSpanElement;
+  private controlsGroup!: HTMLSpanElement;
   private dragHandler: DragHandler | null = null;
   private controller: MediaController | null = null;
   private resizeObserver: ResizeObserver | null = null;
   private currentPosition: DragPosition = { xRatio: 0.02, yRatio: 0.02 };
   private highlightTimer: number | null = null;
+  private hoverStart = 0;
 
   constructor() {
     super();
@@ -134,14 +176,26 @@ export class VelocityControllerElement extends HTMLElement {
     style.textContent = OVERLAY_STYLE;
 
     this.pillElem = document.createElement("div");
-    this.pillElem.className = "velocity-pill";
+    this.pillElem.id = "controller";
+    this.pillElem.className = "velocity-controller";
 
-    // Left controls group: Rewind & Slower
-    const leftGroup = document.createElement("div");
-    leftGroup.className = "controls-group";
+    // Draggable rate badge on the left
+    this.rateBadge = document.createElement("span");
+    this.rateBadge.className = "draggable rate-badge";
+    this.rateBadge.setAttribute("data-action", "drag");
+    this.rateBadge.setAttribute(
+      "aria-label",
+      "Playback speed. Double click to reset to 1.00"
+    );
+    this.rateBadge.textContent = "1.00";
+
+    // Controls group expanding to the right on hover
+    this.controlsGroup = document.createElement("span");
+    this.controlsGroup.id = "controls";
+    this.controlsGroup.className = "controls-group";
 
     const rewindBtn = document.createElement("button");
-    rewindBtn.className = "ctrl-btn";
+    rewindBtn.className = "ctrl-btn rw";
     rewindBtn.setAttribute("data-action", "rewind");
     rewindBtn.setAttribute("aria-label", "Rewind 10 seconds");
     rewindBtn.textContent = "«";
@@ -152,20 +206,6 @@ export class VelocityControllerElement extends HTMLElement {
     slowerBtn.setAttribute("aria-label", "Decrease playback speed");
     slowerBtn.textContent = "−";
 
-    leftGroup.appendChild(rewindBtn);
-    leftGroup.appendChild(slowerBtn);
-
-    // Center rate badge (displays 2.20, 1.00, etc.)
-    this.rateBadge = document.createElement("span");
-    this.rateBadge.className = "rate-badge";
-    this.rateBadge.setAttribute("data-action", "reset");
-    this.rateBadge.setAttribute("aria-label", "Playback speed. Click to reset to 1.00");
-    this.rateBadge.textContent = "1.00";
-
-    // Right controls group: Faster, Advance, and Close
-    const rightGroup = document.createElement("div");
-    rightGroup.className = "controls-group";
-
     const fasterBtn = document.createElement("button");
     fasterBtn.className = "ctrl-btn";
     fasterBtn.setAttribute("data-action", "faster");
@@ -173,40 +213,43 @@ export class VelocityControllerElement extends HTMLElement {
     fasterBtn.textContent = "+";
 
     const advanceBtn = document.createElement("button");
-    advanceBtn.className = "ctrl-btn";
+    advanceBtn.className = "ctrl-btn rw";
     advanceBtn.setAttribute("data-action", "advance");
     advanceBtn.setAttribute("aria-label", "Advance 10 seconds");
     advanceBtn.textContent = "»";
 
     const closeBtn = document.createElement("button");
-    closeBtn.className = "ctrl-btn";
+    closeBtn.className = "ctrl-btn close-btn";
     closeBtn.setAttribute("data-action", "close");
     closeBtn.setAttribute("aria-label", "Hide controller (Press V to toggle)");
     closeBtn.textContent = "×";
 
-    rightGroup.appendChild(fasterBtn);
-    rightGroup.appendChild(advanceBtn);
-    rightGroup.appendChild(closeBtn);
+    this.controlsGroup.appendChild(rewindBtn);
+    this.controlsGroup.appendChild(slowerBtn);
+    this.controlsGroup.appendChild(fasterBtn);
+    this.controlsGroup.appendChild(advanceBtn);
+    this.controlsGroup.appendChild(closeBtn);
 
-    this.pillElem.appendChild(leftGroup);
+    // Speed badge first, then controls group
     this.pillElem.appendChild(this.rateBadge);
-    this.pillElem.appendChild(rightGroup);
+    this.pillElem.appendChild(this.controlsGroup);
 
     this.shadow.appendChild(style);
     this.shadow.appendChild(this.pillElem);
 
-    this.bindClickActions();
+    this.setupInteractions();
   }
 
-  private bindClickActions(): void {
+  private setupInteractions(): void {
+    // 1. Button click actions and bubbling prevention
     this.pillElem.addEventListener("click", (e: MouseEvent) => {
+      e.stopPropagation();
       const target = e.target as HTMLElement | null;
       if (!target || !this.controller) return;
 
       const action = target.getAttribute("data-action");
-      if (!action) return;
+      if (!action || action === "drag") return;
 
-      e.stopPropagation();
       e.preventDefault();
 
       switch (action) {
@@ -215,9 +258,6 @@ export class VelocityControllerElement extends HTMLElement {
           break;
         case "slower":
           this.controller.decreaseRate();
-          break;
-        case "reset":
-          this.controller.resetRate();
           break;
         case "faster":
           this.controller.increaseRate();
@@ -230,6 +270,60 @@ export class VelocityControllerElement extends HTMLElement {
           break;
       }
     });
+
+    this.pillElem.addEventListener("mousedown", (e: MouseEvent) => {
+      e.stopPropagation();
+    });
+
+    // 2. Double-click on speed indicator resets speed to 1.00
+    this.rateBadge.addEventListener("dblclick", (e: MouseEvent) => {
+      e.stopPropagation();
+      e.preventDefault();
+      this.controller?.resetRate();
+    });
+
+    // 3. Mouse wheel speed adjustment with hover dwell gate & trackpad filtering
+    const HOVER_DWELL_MS = 300;
+    const TOUCHPAD_THRESHOLD = 50;
+
+    this.pillElem.addEventListener("mouseenter", () => {
+      this.hoverStart = performance.now();
+    });
+
+    this.pillElem.addEventListener("mouseleave", () => {
+      this.hoverStart = 0;
+    });
+
+    this.pillElem.addEventListener(
+      "wheel",
+      (e: WheelEvent) => {
+        // Ignore pinch zoom
+        if (e.ctrlKey) return;
+
+        // Reject wheel events before hover dwell threshold is reached
+        if (performance.now() - this.hoverStart < HOVER_DWELL_MS) return;
+
+        // Filter out tiny trackpad scrolling
+        if (
+          e.deltaMode === WheelEvent.DOM_DELTA_PIXEL &&
+          Math.abs(e.deltaY) < TOUCHPAD_THRESHOLD
+        ) {
+          return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!this.controller) return;
+
+        if (e.deltaY < 0) {
+          this.controller.increaseRate();
+        } else {
+          this.controller.decreaseRate();
+        }
+      },
+      { passive: false }
+    );
   }
 
   /**

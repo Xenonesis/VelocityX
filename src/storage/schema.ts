@@ -33,6 +33,8 @@ export interface SettingsV1 {
   rewindSeconds: number;
   advanceSeconds: number;
   rememberPlaybackSpeed: boolean;
+  audioBoolean?: boolean;
+  startHidden?: boolean;
   lastSpeed: number;
   overlay: OverlaySettings;
   shortcuts: ShortcutBinding[];
