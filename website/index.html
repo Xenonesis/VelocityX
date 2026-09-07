@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VelocityX — Precision Video Playback Engine</title>
+  <meta name="description" content="Fine-grained HTML5 video playback control from 0.07× to 16.00×. Sub-frame rate arbitration, 300% audio boost, RMS silence skip, and closed Shadow DOM isolation under Manifest V3.">
+  <link rel="icon" type="image/png" href="assets/icons/icon-48.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="studio-deck">
+  <!-- Top Telemetry Header -->
+  <header class="studio-header">
+    <div class="header-container">
+      <a href="#" class="brand-group">
+        <div class="brand-icon-wrapper">
+          <img src="assets/icons/icon-48.png" alt="VelocityX Icon" class="brand-icon" width="28" height="28">
+          <span class="pulse-dot"></span>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Velocity<span class="brand-accent">X</span></span>
+          <span class="version-tag">v1.0.0</span>
+        </div>
+      </a>
+
+      <nav class="studio-nav">
+        <a href="#simulator" class="nav-link">Simulator</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#keyboard" class="nav-link">Shortcuts</a>
+        <a href="#specs" class="nav-link">Specs</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="https://github.com/velocityx/velocityx" target="_blank" rel="noopener noreferrer" class="github-star-btn" id="github-star-btn">
+          <svg class="gh-icon" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          <span class="gh-label">Star</span>
+          <span class="gh-count">1.4k</span>
+        </a>
+        <button class="nav-cta-btn" id="header-install-btn">Get Extension</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="hero-section">
+      <div class="hero-glow-underlay"></div>
+      <div class="hero-container">
+        <!-- Eyebrow Badge -->
+        <div class="telemetry-badge">
+          <span class="status-indicator"></span>
+          <span class="badge-code">PRECISION MEDIA ENGINE</span>
+          <span class="divider">//</span>
+          <span class="badge-meta">MANIFEST V3 AUDITED</span>
+        </div>
+
+        <!-- Headline & Subtitle -->
+        <h1 class="hero-headline">
+          Fine-Grained Video Control<br>
+          <span class="highlight-gradient">at Studio Precision</span>
+        </h1>
+        <p class="hero-subtitle">
+          Control any HTML5 video or audio across any website from 0.07× to 16.00× with sub-frame rate arbitration, 300% dynamic volume boost, and intelligent RMS silence skip.
+        </p>
+
+        <!-- CTA Action Hub -->
+        <div class="cta-action-hub">
+          <div class="download-split-btn">
+            <button id="primary-download-btn" class="btn btn-primary" title="Download extension archive">
+              <svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+              </svg>
+              <span id="primary-download-text">Download for Chrome (v1.0.0)</span>
+            </button>
+            <button id="download-dropdown-toggle" class="dropdown-trigger" aria-label="Select browser platform" aria-haspopup="true" aria-expanded="false">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <!-- Platform Dropdown Menu -->
+            <div id="download-dropdown" class="download-dropdown-menu" role="menu">
+              <div class="dropdown-header">Select Target Platform</div>
+              <a href="#" class="dropdown-item" data-platform="chrome" role="menuitem">
+                <div class="item-title">
+                  <span class="dot chrome-dot"></span>
+                  <span>Google Chrome / Chromium</span>
+                </div>
+                <span class="item-meta">v1.0.0 ZIP</span>
+              </a>
+              <a href="#" class="dropdown-item" data-platform="firefox" role="menuitem">
+                <div class="item-title">
+                  <span class="dot firefox-dot"></span>
+                  <span>Mozilla Firefox</span>
+                </div>
+                <span class="item-meta">v1.0.0 ZIP</span>
+              </a>
+              <a href="#" class="dropdown-item" data-platform="edge" role="menuitem">
+                <div class="item-title">
+                  <span class="dot edge-dot"></span>
+                  <span>Microsoft Edge</span>
+                </div>
+                <span class="item-meta">v1.0.0 ZIP</span>
+              </a>
+              <a href="#" class="dropdown-item" data-platform="brave" role="menuitem">
+                <div class="item-title">
+                  <span class="dot brave-dot"></span>
+                  <span>Brave Browser</span>
+                </div>
+                <span class="item-meta">v1.0.0 ZIP</span>
+              </a>
+            </div>
+          </div>
+
+          <button id="open-install-guide-btn" class="btn btn-secondary">
+            <svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <span>Installation Guide</span>
+          </button>
+        </div>
+
+        <!-- Simulator Section -->
+        <div id="simulator" class="simulator-wrapper">
+          <div class="console-bezel">
+            <!-- Console Window Bar -->
+            <div class="console-topbar">
+              <div class="console-indicators">
+                <span class="dot-red"></span>
+                <span class="dot-amber"></span>
+                <span class="dot-green"></span>
+              </div>
+              <div class="console-title">
+                <span class="console-tag">FEED //</span>
+                <span class="console-source">LIVE DEMO STREAM [960×540 @ 30FPS]</span>
+              </div>
+              <div class="console-telemetry">
+                <span class="audio-state" id="sim-audio-state">RMS: ACTIVE</span>
+                <span class="telemetry-clock" id="sim-clock">00:00.00</span>
+              </div>
+            </div>
+
+            <!-- Video Player Viewport -->
+            <div class="video-viewport" id="video-viewport" tabindex="0" title="Click to focus keyboard controls">
+              <video
+                id="demo-video"
+                src="assets/demo/sample.mp4"
+                loop
+                muted
+                playsinline
+                autoplay
+                preload="auto"
+              ></video>
+
+              <!-- Play/Pause Overlay Indicator -->
+              <div class="viewport-play-overlay" id="viewport-play-overlay">
+                <button class="overlay-play-btn" id="overlay-play-btn" aria-label="Toggle Playback">
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Velocity Controller Pill (Mimics <velocity-controller>) -->
+              <div id="sim-controller" class="sim-controller-pill" role="toolbar" aria-label="Speed Controller">
+                <div class="sim-draggable" id="sim-drag-handle" title="Velocity HUD (Click rate to reset)">
+                  <span class="drag-grip">⋮⋮</span>
+                  <span id="sim-rate-display" class="sim-rate-badge" title="Reset Rate (R) / Preferred (G)">1.00×</span>
+                </div>
+                <div class="sim-controls" id="sim-controls">
+                  <button id="sim-slower-btn" class="ctrl-btn" title="Decrease Speed [S]">«</button>
+                  <button id="sim-faster-btn" class="ctrl-btn" title="Increase Speed [D]">»</button>
+                  <button id="sim-rewind-btn" class="ctrl-btn rw" title="Rewind 10s [Z]">↺</button>
+                  <button id="sim-forward-btn" class="ctrl-btn rw" title="Forward 10s [X]">↻</button>
+                  <button id="sim-close-btn" class="ctrl-btn close-btn" title="Hide Controller [V]">×</button>
+                </div>
+              </div>
+
+              <!-- HUD Toast Notification -->
+              <div id="sim-toast" class="sim-hud-toast" role="status" aria-live="polite">
+                <span id="sim-toast-icon" class="toast-icon">⚡</span>
+                <span id="sim-toast-text" class="toast-text">1.00×</span>
+              </div>
+            </div>
+
+            <!-- Simulator Action Strip -->
+            <div class="console-footer">
+              <div class="prompt-hint">
+                <span class="hint-pulse"></span>
+                <span class="hint-text">ACTIVE SIMULATOR // Click video and press keys:</span>
+              </div>
+              <div class="quick-keys">
+                <span class="mini-kbd" data-trigger="KeyS">[S] -0.1×</span>
+                <span class="mini-kbd" data-trigger="KeyD">[D] +0.1×</span>
+                <span class="mini-kbd" data-trigger="KeyR">[R] 1.00×</span>
+                <span class="mini-kbd" data-trigger="KeyG">[G] 1.80×</span>
+                <span class="mini-kbd" data-trigger="KeyK">[K] Silence Skip</span>
+                <span class="mini-kbd" data-trigger="KeyZ">[Z] -10s</span>
+                <span class="mini-kbd" data-trigger="KeyX">[X] +10s</span>
+                <span class="mini-kbd" data-trigger="KeyP">[P] PiP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Architecture Features Matrix -->
+    <section id="features" class="features-section">
+      <div class="section-container">
+        <div class="section-header">
+          <div class="section-eyebrow">HARDWARE-ACCELERATED PIPELINE</div>
+          <h2 class="section-title">Built for Sub-Millisecond Speed Control</h2>
+          <p class="section-desc">
+            Standard extensions inject brittle script tags or fight browser limits. VelocityX operates via direct media DOM arbitration, Web Audio gain matrices, and closed Shadow DOM roots.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <!-- Card 1: Rate Arbitration -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Multi-Frame Rate Arbitration</h3>
+            <p class="feature-body">
+              Seamlessly traverses cross-origin iframes, dynamic shadow roots, and site player layers (YouTube, Netflix, Prime Video). Reconciles rate drift across multiple media streams simultaneously.
+            </p>
+            <div class="feature-telemetry">
+              <span class="telemetry-tag">RECONCILIATION: ZERO JITTER</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Granularity -->
+          <div class="feature-card highlight-card">
+            <div class="feature-icon-box">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">0.07× – 16.00× Granularity</h3>
+            <p class="feature-body">
+              Break past browser-imposed 0.25× to 2.00× limits. Increment in micro-steps down to 0.01× or leap in 0.10× increments with zero audio pitch warble or sample rate tearing.
+            </p>
+            <div class="feature-telemetry">
+              <span class="telemetry-tag">RESOLUTION: 0.01× INCREMENTS</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Audio Boost -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">300% Dynamic Audio Boost</h3>
+            <p class="feature-body">
+              Quiet microphones and whispered audio pipelines amplified with Web Audio GainNode & DynamicsCompressorNode. Delivers rich vocal clarity while preventing speaker clipping.
+            </p>
+            <div class="feature-telemetry">
+              <span class="telemetry-tag">GAIN MATRIX: +12dB LIMITER</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Silence Skip -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 10h3l3-7 4 18 3-11 3 4h4"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Silence Skip via RMS Analysis</h3>
+            <p class="feature-body">
+              Analyzes real-time audio sample RMS energy windows. Accelerates through pauses and silences at 3.00×, then drops back to your nominal playback speed instantaneously on speech attack.
+            </p>
+            <div class="feature-telemetry">
+              <span class="telemetry-tag">LATENCY: &lt;16ms ATTACK</span>
+            </div>
+          </div>
+
+          <!-- Card 5: Closed Shadow DOM -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Closed Shadow DOM Isolation</h3>
+            <p class="feature-body">
+              Overlay controllers and HUD toasts render in strict Closed Shadow DOM roots. Zero CSS bleeding from host sites, complete tamper resistance against host scripts, and unblockable pointer events.
+            </p>
+            <div class="feature-telemetry">
+              <span class="telemetry-tag">ISOLATION: MODE=CLOSED</span>
+            </div>
+          </div>
+
+          <!-- Card 6: Zero Telemetry -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">100% Offline & Private</h3>
+            <p class="feature-body">
+              VelocityX makes zero network requests. No external analytics, no tracking beacons, no background servers. What you watch stays completely on your local machine.
+            </p>
+            <div class="feature-telemetry">
+              <span class="telemetry-tag">NETWORK TRAFFIC: 0 BYTES</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hardware Keyboard Reference Grid -->
+    <section id="keyboard" class="keyboard-section">
+      <div class="section-container">
+        <div class="section-header">
+          <div class="section-eyebrow">PHYSICAL KEYCAP CONTROLS</div>
+          <h2 class="section-title">Tactile Keyboard Reference</h2>
+          <p class="section-desc">
+            Engineered for high-throughput media consumers, editors, and students. Master these single-finger shortcuts to control playback without ever touching your mouse.
+          </p>
+        </div>
+
+        <div class="keycap-grid" id="keycap-grid">
+          <!-- Key D -->
+          <div class="keycap-card" data-code="KeyD">
+            <div class="keycap-wrapper">
+              <kbd class="keycap">D</kbd>
+            </div>
+            <div class="keycap-meta">
+              <span class="keycap-title">Speed Up (+0.10×)</span>
+              <span class="keycap-desc">Increment playback rate by step size (0.10× default, customizable).</span>
+            </div>
+          </div>
+
+          <!-- Key S -->
+          <div class="keycap-card" data-code="KeyS">
+            <div class="keycap-wrapper">
+              <kbd class="keycap">S</kbd>
+            </div>
+            <div class="keycap-meta">
+              <span class="keycap-title">Slow Down (-0.10×)</span>
+              <span class="keycap-desc">Decrement playback rate down to minimum precision threshold of 0.07×.</span>
+            </div>
+          </div>
+
+          <!-- Key R -->
+          <div class="keycap-card" data-code="KeyR">
+            <div class="keycap-wrapper">
+              <kbd class="keycap">R</kbd>
+            </div>
+            <div class="keycap-meta">
+              <span class="keycap-title">Reset Rate / Restore</span>
+              <span class="keycap-desc">Snaps immediately to 1.00×. Press again to restore prior custom speed.</span>
+            </div>
+          </div>
+
+          <!-- Key G -->
+          <div class="keycap-card" data-code="KeyG">
+            <div class="keycap-wrapper">
+              <kbd class="keycap">G</kbd>
+            </div>
+            <div class="keycap-meta">
+              <span class="keycap-title">Preferred Speed (1.80×)</span>
+              <span class="keycap-desc">Jump straight to your user-configured sweet spot. Toggles back on second tap.</span>
+            </div>
+          </div>
+
+          <!-- Key K -->
+          <div class="keycap-card" data-code="KeyK">
+            <div class="keycap-wrapper">
+              <kbd class="keycap">K</kbd>
+            </div>
+            <div class="keycap-meta">
+              <span class="keycap-title">Toggle Silence Skip</span>
+              <span class="keycap-desc">Activates real-time RMS detector to fast-forward dead air pauses at 3.00×.</span>
+            </div>
+          </div>
+
+          <!-- Key Z -->
+          <div class="keycap-card" data-code="KeyZ">
+            <div class="keycap-wrapper">
+              <kbd class="keycap">Z</kbd>
+            </div>
+            <div class="keycap-meta">
+              <span class="keycap-title">Rewind 10 Seconds</span>
+              <span class="keycap-desc">Instantly seek back 10s without interrupting audio buffer synchronization.</span>
+            </div>
+          </div>
+
+          <!-- Key X -->
+          <div class="keycap-card" data-code="KeyX">
+            <div class="keycap-wrapper">
+              <kbd class="keycap">X</kbd>
+            </div>
+            <div class="keycap-meta">
+              <span class="keycap-title">Forward 10 Seconds</span>
+              <span class="keycap-desc">Fast-forward by 10s with immediate frame alignment.</span>
+            </div>
+          </div>
+
+          <!-- Key P -->
+          <div class="keycap-card" data-code="KeyP">
+            <div class="keycap-wrapper">
+              <kbd class="keycap">P</kbd>
+            </div>
+            <div class="keycap-meta">
+              <span class="keycap-title">Picture-in-Picture</span>
+              <span class="keycap-desc">Pop video out into a floating system desktop window with controls intact.</span>
+            </div>
+          </div>
+
+          <!-- Key V -->
+          <div class="keycap-card" data-code="KeyV">
+            <div class="keycap-wrapper">
+              <kbd class="keycap">V</kbd>
+            </div>
+            <div class="keycap-meta">
+              <span class="keycap-title">Toggle Controller HUD</span>
+              <span class="keycap-desc">Show or hide the floating on-screen pill controller overlay.</span>
+            </div>
+          </div>
+
+          <!-- Key B -->
+          <div class="keycap-card" data-code="KeyB">
+            <div class="keycap-wrapper">
+              <kbd class="keycap">B</kbd>
+            </div>
+            <div class="keycap-meta">
+              <span class="keycap-title">Audio Boost (300%)</span>
+              <span class="keycap-desc">Toggle the Web Audio gain matrix limiter on low-volume content.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Specs Comparison Section -->
+    <section id="specs" class="specs-section">
+      <div class="section-container">
+        <div class="section-header">
+          <div class="section-eyebrow">BENCHMARK SPECIFICATIONS</div>
+          <h2 class="section-title">Engine Comparison Table</h2>
+          <p class="section-desc">
+            How VelocityX compares against stock browser players and legacy playback extensions.
+          </p>
+        </div>
+
+        <div class="specs-table-wrapper">
+          <table class="specs-table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th class="col-highlight">VelocityX Engine</th>
+                <th>Standard Native HTML5</th>
+                <th>Legacy Video Speed Extensions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Speed Range</td>
+                <td class="col-highlight"><span class="badge-cyan">0.07× – 16.00×</span></td>
+                <td>0.25× – 2.00×</td>
+                <td>0.10× – 4.00×</td>
+              </tr>
+              <tr>
+                <td>Granularity Step</td>
+                <td class="col-highlight"><span class="badge-cyan">0.01× / 0.10× micro</span></td>
+                <td>0.25× static coarse</td>
+                <td>0.10× coarse</td>
+              </tr>
+              <tr>
+                <td>Audio Volume Gain</td>
+                <td class="col-highlight"><span class="badge-emerald">300% GainNode Limiter</span></td>
+                <td>100% max (no boost)</td>
+                <td>Unsupported</td>
+              </tr>
+              <tr>
+                <td>RMS Silence Skip</td>
+                <td class="col-highlight"><span class="badge-emerald">Real-time dynamic (&lt;16ms)</span></td>
+                <td>Unsupported</td>
+                <td>Unsupported</td>
+              </tr>
+              <tr>
+                <td>DOM Encapsulation</td>
+                <td class="col-highlight"><span class="badge-cyan">Closed Shadow DOM</span></td>
+                <td>N/A</td>
+                <td>Open DOM (CSS conflicts)</td>
+              </tr>
+              <tr>
+                <td>Cross-Origin Iframe Support</td>
+                <td class="col-highlight"><span class="badge-cyan">Full isolated bridge</span></td>
+                <td>Per-frame restricted</td>
+                <td>Fails on strict iframes</td>
+              </tr>
+              <tr>
+                <td>Privacy & Telemetry</td>
+                <td class="col-highlight"><span class="badge-cyan">0 bytes / 100% local</span></td>
+                <td>Browser vendor telemetry</td>
+                <td>Frequent tracking scripts</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Installation Modal Component -->
+  <div id="install-modal" class="install-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-pulse"></span>
+          <h3 class="modal-title" id="modal-title">Installation Guide</h3>
+        </div>
+        <button class="close-btn" aria-label="Close dialog">×</button>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="modal-tabs">
+        <button class="tab-btn active" data-target="chrome">
+          <span class="tab-dot chrome-dot"></span>
+          <span>Chrome / Brave / Edge</span>
+        </button>
+        <button class="tab-btn" data-target="firefox">
+          <span class="tab-dot firefox-dot"></span>
+          <span>Mozilla Firefox</span>
+        </button>
+      </div>
+
+      <!-- Tab Pane: Chrome -->
+      <div class="tab-pane" id="tab-chrome">
+        <div class="install-steps">
+          <div class="install-step">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h4>Download & Extract</h4>
+              <p>Download the latest release archive <a href="assets/downloads/velocityx-chrome-v1.0.0.zip" download class="link-cyan">velocityx-chrome-v1.0.0.zip</a> and unpack it into a persistent local directory.</p>
+            </div>
+          </div>
+
+          <div class="install-step">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h4>Navigate to Extensions</h4>
+              <p>Open your Chromium browser and go to your extensions dashboard:</p>
+              <div class="url-copy-box">
+                <code class="url-badge">chrome://extensions</code>
+                <button class="copy-url-btn" data-copy="chrome://extensions" title="Copy to clipboard">Copy URL</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="install-step">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h4>Enable Developer Mode</h4>
+              <p>Switch on the <strong>Developer mode</strong> toggle located in the upper-right corner of the Extensions page.</p>
+            </div>
+          </div>
+
+          <div class="install-step">
+            <span class="step-num">04</span>
+            <div class="step-content">
+              <h4>Load Unpacked Extension</h4>
+              <p>Click the <strong>Load unpacked</strong> button and select the extracted folder containing <code>manifest.json</code>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Pane: Firefox -->
+      <div class="tab-pane" id="tab-firefox" style="display:none">
+        <div class="install-steps">
+          <div class="install-step">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h4>Download Firefox Archive</h4>
+              <p>Download <a href="assets/downloads/velocityx-firefox-v1.0.0.zip" download class="link-cyan">velocityx-firefox-v1.0.0.zip</a> to your machine.</p>
+            </div>
+          </div>
+
+          <div class="install-step">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h4>Open Debugging Console</h4>
+              <p>Navigate to Firefox's internal add-on debugger:</p>
+              <div class="url-copy-box">
+                <code class="url-badge">about:debugging#/runtime/this-firefox</code>
+                <button class="copy-url-btn" data-copy="about:debugging#/runtime/this-firefox" title="Copy to clipboard">Copy URL</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="install-step">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h4>Load Temporary Add-on</h4>
+              <p>Click <strong>Load Temporary Add-on...</strong> and choose either the downloaded ZIP archive or the extracted <code>manifest.json</code> file.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <span class="modal-footer-note">All permissions are strictly scoped to active tabs with HTML5 video elements.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Studio Footer -->
+  <footer class="studio-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="assets/icons/icon-48.png" alt="VelocityX" width="22" height="22">
+          <span class="footer-name">VelocityX Studio</span>
+        </div>
+        <p class="footer-tagline">Engineered for absolute fidelity, sub-frame control, and zero user telemetry.</p>
+      </div>
+
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <span class="col-heading">Product</span>
+          <a href="#simulator" class="footer-link">Simulator</a>
+          <a href="#features" class="footer-link">Features</a>
+          <a href="#keyboard" class="footer-link">Shortcuts</a>
+          <a href="#specs" class="footer-link">Architecture</a>
+        </div>
+        <div class="footer-col">
+          <span class="col-heading">Downloads</span>
+          <a href="assets/downloads/velocityx-chrome-v1.0.0.zip" download class="footer-link">Chrome ZIP (v1.0.0)</a>
+          <a href="assets/downloads/velocityx-firefox-v1.0.0.zip" download class="footer-link">Firefox ZIP (v1.0.0)</a>
+          <a href="#" class="footer-link open-install-btn">Install Guide</a>
+        </div>
+        <div class="footer-col">
+          <span class="col-heading">Open Source</span>
+          <a href="https://github.com/velocityx/velocityx" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub Repository</a>
+          <a href="https://github.com/velocityx/velocityx/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="footer-link">MIT License</a>
+          <a href="https://github.com/velocityx/velocityx/issues" target="_blank" rel="noopener noreferrer" class="footer-link">Issue Tracker</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-container">
+        <span>© 2026 VelocityX Team. Released under the MIT License.</span>
+        <span class="privacy-statement">Zero tracking. Zero cookies. 100% Client-Side.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Entrypoint -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
