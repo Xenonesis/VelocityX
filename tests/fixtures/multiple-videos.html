@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Velocity Fixture - Multiple Videos</title>
+</head>
+<body>
+  <h1>Multiple Videos Fixture</h1>
+  <div class="video-grid" style="display: flex; gap: 20px;">
+    <!-- Main playing video -->
+    <div id="main-container" style="position: relative; width: 480px; height: 270px; background: #111;">
+      <video id="main-video" width="480" height="270" controls autoplay>
+        <source src="data:video/mp4;base64,AAAA" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Background muted video -->
+    <div id="preview-container" style="position: relative; width: 240px; height: 135px; background: #222;">
+      <video id="preview-video" width="240" height="135" muted loop autoplay>
+        <source src="data:video/mp4;base64,AAAA" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</body>
+</html>

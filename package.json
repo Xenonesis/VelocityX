@@ -1,0 +1,32 @@
+{
+  "name": "velocity",
+  "version": "1.0.0",
+  "description": "Fine-grained playback controls for HTML5 video and audio under Manifest V3",
+  "type": "module",
+  "scripts": {
+    "generate-icons": "node --loader tsx/esm scripts/generate-icons.ts || tsx scripts/generate-icons.ts || node scripts/generate-icons.js",
+    "build": "tsx scripts/build.ts",
+    "dev": "tsx scripts/build.ts --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "chrome-extension",
+    "video-speed",
+    "playback-rate",
+    "manifest-v3",
+    "html5-media"
+  ],
+  "author": "Velocity Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome": "^0.0.312",
+    "@types/node": "^22.13.10",
+    "esbuild": "^0.25.0",
+    "jsdom": "^26.0.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.8"
+  }
+}

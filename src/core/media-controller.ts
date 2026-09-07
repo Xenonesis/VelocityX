@@ -1,0 +1,183 @@
+import {
+  MIN_SPEED,
+  MAX_SPEED,
+  DEFAULT_STEP,
+  NORMAL_SPEED,
+  DEFAULT_PREFERRED_SPEED,
+  normalizeRate,
+  RateSource,
+} from "./constants";
+import { clamp } from "../utils/clamp";
+import { isLiveMedia } from "../utils/media";
+
+export interface MediaControllerEvents {
+  onRateChange?: (controller: MediaController, rate: number, source: RateSource) => void;
+  onStateChange?: (controller: MediaController) => void;
+  onDestroy?: (controller: MediaController) => void;
+}
+
+export class MediaController {
+  readonly media: HTMLMediaElement;
+  private readonly abortController = new AbortController();
+  private readonly events: MediaControllerEvents;
+
+  desiredRate: number;
+  observedRate: number;
+  lastSource: RateSource = "initial";
+  markerTime: number | null = null;
+  previousRateBeforePreferred: number | null = null;
+  lastInteractionAt = Date.now();
+  destroyed = false;
+
+  constructor(media: HTMLMediaElement, initialRate = NORMAL_SPEED, events: MediaControllerEvents = {}) {
+    this.media = media;
+    this.events = events;
+
+    const rate = clamp(normalizeRate(initialRate), MIN_SPEED, MAX_SPEED);
+    this.desiredRate = rate;
+    this.observedRate = media.playbackRate;
+
+    // Apply initial desired rate if differing
+    if (media.playbackRate !== rate) {
+      try {
+        media.playbackRate = rate;
+      } catch {
+        // Some DRM or restricted players may reject initial assignment
+      }
+    }
+
+    this.bindEvents();
+  }
+
+  private bindEvents(): void {
+    const { signal } = this.abortController;
+
+    this.media.addEventListener(
+      "ratechange",
+      () => {
+        this.observedRate = this.media.playbackRate;
+        this.events.onRateChange?.(this, this.observedRate, this.lastSource);
+      },
+      { signal }
+    );
+
+    const touchEvents = ["play", "pause", "timeupdate", "loadedmetadata", "emptied"] as const;
+    for (const evt of touchEvents) {
+      this.media.addEventListener(
+        evt,
+        () => {
+          this.events.onStateChange?.(this);
+        },
+        { signal }
+      );
+    }
+  }
+
+  /**
+   * Sets target playback rate with normalized clamping and source tracking.
+   */
+  setRate(targetRate: number, source: RateSource = "extension"): void {
+    if (this.destroyed) return;
+    const clamped = clamp(normalizeRate(targetRate), MIN_SPEED, MAX_SPEED);
+    this.desiredRate = clamped;
+    this.lastSource = source;
+    this.lastInteractionAt = Date.now();
+
+    try {
+      if (this.media.playbackRate !== clamped) {
+        this.media.playbackRate = clamped;
+      }
+    } catch (err) {
+      console.warn("[Velocity] Failed to set playbackRate on media:", err);
+    }
+  }
+
+  /**
+   * Increments rate by step (default 0.1)
+   */
+  increaseRate(step = DEFAULT_STEP): void {
+    this.setRate(this.desiredRate + step, "extension");
+  }
+
+  /**
+   * Decrements rate by step (default 0.1)
+   */
+  decreaseRate(step = DEFAULT_STEP): void {
+    this.setRate(this.desiredRate - step, "extension");
+  }
+
+  /**
+   * Resets rate to normal or specified reset target (default 1.0)
+   */
+  resetRate(target = NORMAL_SPEED): void {
+    this.setRate(target, "extension");
+  }
+
+  /**
+   * Seeks relative seconds (+ or -) with safety bounds and live stream detection.
+   */
+  seekBy(seconds: number): void {
+    if (this.destroyed || !Number.isFinite(seconds)) return;
+    if (isLiveMedia(this.media)) return;
+
+    this.lastInteractionAt = Date.now();
+    const duration = Number.isFinite(this.media.duration) ? this.media.duration : Infinity;
+    const nextTime = clamp(this.media.currentTime + seconds, 0, duration);
+
+    try {
+      this.media.currentTime = nextTime;
+    } catch (err) {
+      console.warn("[Velocity] Failed to seek media:", err);
+    }
+  }
+
+  /**
+   * Sets a temporal marker at current video playback position.
+   */
+  setMarker(): void {
+    if (this.destroyed) return;
+    this.markerTime = this.media.currentTime;
+    this.lastInteractionAt = Date.now();
+  }
+
+  /**
+   * Jumps to saved marker time if set.
+   */
+  jumpToMarker(): void {
+    if (this.destroyed || this.markerTime === null) return;
+    this.lastInteractionAt = Date.now();
+    try {
+      this.media.currentTime = this.markerTime;
+    } catch (err) {
+      console.warn("[Velocity] Failed to jump to marker:", err);
+    }
+  }
+
+  /**
+   * Toggles between preferred rate and previous rate.
+   */
+  togglePreferredRate(preferred = DEFAULT_PREFERRED_SPEED): void {
+    if (this.destroyed) return;
+    const normPreferred = clamp(normalizeRate(preferred), MIN_SPEED, MAX_SPEED);
+
+    if (this.desiredRate === normPreferred) {
+      // Return to prior rate if available, otherwise 1.0
+      const restoreRate = this.previousRateBeforePreferred ?? NORMAL_SPEED;
+      this.previousRateBeforePreferred = null;
+      this.setRate(restoreRate, "extension");
+    } else {
+      this.previousRateBeforePreferred = this.desiredRate;
+      this.setRate(normPreferred, "extension");
+    }
+  }
+
+  /**
+   * Complete deterministic teardown of all event listeners and timers.
+   */
+  destroy(): void {
+    if (this.destroyed) return;
+    this.destroyed = true;
+    this.abortController.abort();
+    this.events.onDestroy?.(this);
+  }
+}

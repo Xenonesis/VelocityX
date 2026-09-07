@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "Velocity — Video Speed Controller",
+  "version": "1.0.0",
+  "description": "Fine-grained playback controls, custom shortcuts, and intelligent speed arbitration for HTML5 video and audio.",
+  "permissions": ["storage"],
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  },
+  "action": {
+    "default_popup": "ui/popup/popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon-16.png",
+      "48": "assets/icons/icon-48.png",
+      "128": "assets/icons/icon-128.png"
+    }
+  },
+  "options_ui": {
+    "page": "ui/options/options.html",
+    "open_in_tab": true
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "all_frames": true,
+      "match_about_blank": true,
+      "js": ["isolated-bridge.js"],
+      "run_at": "document_start",
+      "world": "ISOLATED"
+    },
+    {
+      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "all_frames": true,
+      "match_about_blank": true,
+      "js": ["main-entry.js"],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    }
+  ]
+}

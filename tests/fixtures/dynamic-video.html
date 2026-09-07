@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Velocity Fixture - Dynamic Video</title>
+</head>
+<body>
+  <h1>Dynamic Video Insertion Fixture</h1>
+  <button id="spawn-video-btn">Spawn Video Player</button>
+  <div id="dynamic-target" style="margin-top: 20px;"></div>
+
+  <script>
+    document.getElementById("spawn-video-btn").addEventListener("click", () => {
+      const container = document.createElement("div");
+      container.style.position = "relative";
+      container.style.width = "500px";
+      container.style.height = "280px";
+      container.style.backgroundColor = "#000";
+
+      const video = document.createElement("video");
+      video.id = "dynamic-video";
+      video.width = 500;
+      video.height = 280;
+      video.controls = true;
+
+      container.appendChild(video);
+      document.getElementById("dynamic-target").appendChild(container);
+    });
+  </script>
+</body>
+</html>

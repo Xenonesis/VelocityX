@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Velocity Fixture - Keyboard Input Safety</title>
+</head>
+<body>
+  <h1>Keyboard Input Safety Fixture</h1>
+  <p>Typing shortcuts (S, D, R, Z, X, G, V, M, J) inside these fields must never alter video speed.</p>
+
+  <form style="display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin-bottom: 20px;">
+    <label>
+      Normal Input:
+      <input type="text" id="test-input" placeholder="Type letters here...">
+    </label>
+    <label>
+      Textarea:
+      <textarea id="test-textarea" rows="3" placeholder="Type comments here..."></textarea>
+    </label>
+    <label>
+      Contenteditable Div:
+      <div id="test-editable" contenteditable="true" style="border: 1px solid #ccc; padding: 8px; min-height: 40px;">
+        Editable rich text area
+      </div>
+    </label>
+    <label>
+      ARIA Textbox:
+      <div role="textbox" contenteditable="true" style="border: 1px solid #aaa; padding: 8px;">
+        ARIA searchbox
+      </div>
+    </label>
+  </form>
+
+  <div style="position: relative; width: 480px; height: 270px; background: #000;">
+    <video id="safety-video" width="480" height="270" controls>
+      <source src="data:video/mp4;base64,AAAA" type="video/mp4">
+    </video>
+  </div>
+</body>
+</html>

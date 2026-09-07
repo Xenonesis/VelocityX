@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Velocity Fixture - Aggressive Player Rate Reset</title>
+</head>
+<body>
+  <h1>Hostile Player Rate Reset Fixture</h1>
+  <p>This fixture emulates a site player engine that aggressively forces playbackRate to 1.0.</p>
+  <div style="position: relative; width: 640px; height: 360px; background: #000;">
+    <video id="hostile-video" width="640" height="360" controls>
+      <source src="data:video/mp4;base64,AAAA" type="video/mp4">
+    </video>
+  </div>
+  <script>
+    const video = document.getElementById("hostile-video");
+    let resetsCount = 0;
+    video.addEventListener("ratechange", () => {
+      if (video.playbackRate !== 1.0) {
+        resetsCount++;
+        // Attempt immediate reset back to 1.0
+        setTimeout(() => {
+          video.playbackRate = 1.0;
+        }, 10);
+      }
+    });
+  </script>
+</body>
+</html>

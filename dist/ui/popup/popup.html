@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velocity</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 19 22 12 13 5 13 19"></polygon>
+            <polygon points="2 19 11 12 2 19"></polygon>
+          </svg>
+        </div>
+        <span class="brand-name">Velocity</span>
+        <span class="version-tag">v1.0</span>
+      </div>
+      <button id="open-settings-btn" class="icon-btn" aria-label="Open Settings" title="Settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div id="media-status-badge" class="status-indicator">
+      <span class="status-dot"></span>
+      <span id="status-text">Scanning for media...</span>
+    </div>
+
+    <!-- Live Speed Control Gauge -->
+    <div class="gauge-section">
+      <button id="slower-btn" class="gauge-btn" aria-label="Decrease speed">−</button>
+      <div class="gauge-display">
+        <span id="speed-display" class="speed-value">1.0×</span>
+        <span class="speed-label">Playback Speed</span>
+      </div>
+      <button id="faster-btn" class="gauge-btn" aria-label="Increase speed">+</button>
+    </div>
+
+    <!-- Quick Presets -->
+    <div class="presets-section">
+      <span class="section-title">Quick Presets</span>
+      <div class="preset-buttons">
+        <button class="preset-btn" data-speed="1.0">1.0×</button>
+        <button class="preset-btn" data-speed="1.25">1.25×</button>
+        <button class="preset-btn" data-speed="1.5">1.5×</button>
+        <button class="preset-btn" data-speed="1.75">1.75×</button>
+        <button class="preset-btn" data-speed="2.0">2.0×</button>
+        <button class="preset-btn" data-speed="3.0">3.0×</button>
+      </div>
+    </div>
+
+    <!-- Quick Preferences -->
+    <div class="toggles-section">
+      <label class="toggle-row">
+        <span>Remember speed</span>
+        <input type="checkbox" id="remember-speed-toggle">
+        <span class="toggle-switch"></span>
+      </label>
+      <label class="toggle-row">
+        <span>Show controller on page</span>
+        <input type="checkbox" id="overlay-enabled-toggle">
+        <span class="toggle-switch"></span>
+      </label>
+    </div>
+  </div>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

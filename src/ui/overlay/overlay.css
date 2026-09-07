@@ -1,0 +1,108 @@
+:host {
+  all: initial !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 2147483647 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+}
+
+:host([data-hidden="true"]) {
+  display: none !important;
+}
+
+.velocity-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.72);
+  cursor: grab;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.velocity-pill:hover,
+.velocity-pill.expanded,
+.velocity-pill.dragging {
+  background-color: rgba(0, 0, 0, 0.65);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+}
+
+.velocity-pill.dragging {
+  cursor: grabbing;
+}
+
+.rate-badge {
+  font-weight: 600;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.72);
+  padding: 1px 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.velocity-pill:hover .rate-badge,
+.velocity-pill.expanded .rate-badge {
+  color: #ffffff;
+}
+
+.rate-badge.highlight {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+.controls-group {
+  display: none;
+  align-items: center;
+  gap: 1px;
+}
+
+.velocity-pill:hover .controls-group,
+.velocity-pill.expanded .controls-group,
+.velocity-pill.dragging .controls-group {
+  display: inline-flex;
+}
+
+.ctrl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 2px;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.ctrl-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.ctrl-btn:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.ctrl-btn:active {
+  transform: scale(0.92);
+}
