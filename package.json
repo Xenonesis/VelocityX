@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "test:e2e": "npm run build && tsx tests/e2e/extension.e2e.ts",
     "package": "npm run build && tsx scripts/package.ts",
-    "website:sync": "tsx scripts/sync-website-assets.ts"
+    "website:sync": "tsx scripts/sync-website-assets.ts",
+    "test:website": "tsx tests/e2e/website.e2e.ts"
   },
   "keywords": [
     "chrome-extension",
