@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { JSDOM } from "jsdom";
+
 
 describe("Website Landing Page DOM Contract Verification", () => {
   const htmlPath = path.join(process.cwd(), "website", "index.html");
@@ -23,8 +23,7 @@ describe("Website Landing Page DOM Contract Verification", () => {
 
   it("contains all required elements and IDs for DownloadManager, HeroSimulator, and InstallModal", () => {
     const htmlContent = fs.readFileSync(htmlPath, "utf-8");
-    const dom = new JSDOM(htmlContent);
-    const doc = dom.window.document;
+    const doc = new DOMParser().parseFromString(htmlContent, "text/html");
 
     // DownloadManager elements
     expect(doc.getElementById("primary-download-btn")).not.toBeNull();
