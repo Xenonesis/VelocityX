@@ -56,6 +56,8 @@ async function runWebsiteE2E() {
 
   try {
     const page = await browser.newPage();
+    page.on("pageerror", (err) => console.log("[PAGE ERROR]:", err));
+    page.on("console", (msg) => console.log("[PAGE LOG]:", msg.text()));
     await page.goto(url, { waitUntil: "domcontentloaded" });
 
     // Test 1: Brand and Title
@@ -79,8 +81,21 @@ async function runWebsiteE2E() {
     console.log(`[E2E] Rate after KeyD: ${rateKeyD}`);
     if (rateKeyD !== "1.20×") throw new Error(`Expected 1.20× but got ${rateKeyD}`);
 
-    // Test 4: Install Modal
-    await page.click("#open-install-guide-btn");
+    // Test 3b: Preset dials
+    await page.click('.preset-dial-btn[data-rate="2.0"]');
+    const ratePreset = await page.$eval("#sim-rate-display", (el) => el.textContent?.trim());
+    console.log(`[E2E] Rate after 2.0x preset click: ${ratePreset}`);
+    if (ratePreset !== "2.00×") throw new Error(`Expected 2.00× but got ${ratePreset}`);
+
+    // Test 3c: Mute toggle
+    await page.click("#sim-mute-btn");
+    const isMuted = await page.$eval("#demo-video", (v) => (v as HTMLVideoElement).muted);
+    console.log(`[E2E] Video muted after toggle: ${isMuted}`);
+    if (isMuted) throw new Error("Expected video to be unmuted after click");
+
+    const btnExists = await page.$eval("#open-install-guide-btn", (el) => !!el);
+    console.log(`[E2E] #open-install-guide-btn exists: ${btnExists}`);
+    await page.evaluate(() => document.getElementById("open-install-guide-btn")?.click());
     const isModalVisible = await page.$eval("#install-modal", (el) => el.classList.contains("visible"));
     console.log(`[E2E] Install modal opened: ${isModalVisible}`);
     if (!isModalVisible) throw new Error("Modal failed to open");

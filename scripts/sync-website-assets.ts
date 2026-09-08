@@ -43,10 +43,15 @@ export function syncWebsiteAssets(options: SyncOptions): { syncedFiles: string[]
 // CLI execution
 if (process.argv[1] && (process.argv[1].includes("sync-website-assets") || process.argv[1].endsWith("sync-website-assets.ts"))) {
   const root = process.cwd();
-  const res = syncWebsiteAssets({
+  const websiteRes = syncWebsiteAssets({
     releaseDir: path.join(root, "release"),
     iconsDir: path.join(root, "src/assets/icons"),
     websiteDir: path.join(root, "website"),
   });
-  console.log(`[Website Sync] Successfully mirrored ${res.syncedFiles.length} assets to website/assets/`);
+  const rootRes = syncWebsiteAssets({
+    releaseDir: path.join(root, "release"),
+    iconsDir: path.join(root, "src/assets/icons"),
+    websiteDir: root,
+  });
+  console.log(`[Website Sync] Synced ${websiteRes.syncedFiles.length} website assets and ${rootRes.syncedFiles.length} root assets.`);
 }
