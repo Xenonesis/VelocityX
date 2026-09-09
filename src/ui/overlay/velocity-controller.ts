@@ -164,7 +164,7 @@ export class VelocityControllerElement extends HTMLElement {
   private currentPosition: DragPosition = { xRatio: 0.02, yRatio: 0.02 };
   private highlightTimer: number | null = null;
   private hoverStart = 0;
-
+  private lastWheelStep = 0;
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: "closed" });
@@ -285,6 +285,7 @@ export class VelocityControllerElement extends HTMLElement {
     // 3. Mouse wheel speed adjustment with hover dwell gate & trackpad filtering
     const HOVER_DWELL_MS = 300;
     const TOUCHPAD_THRESHOLD = 50;
+    const WHEEL_THROTTLE_MS = 120;
 
     this.pillElem.addEventListener("mouseenter", () => {
       this.hoverStart = performance.now();
@@ -310,6 +311,15 @@ export class VelocityControllerElement extends HTMLElement {
         ) {
           return;
         }
+
+        // Throttle wheel stepping to prevent runaway rates from momentum scrolling
+        const now = performance.now();
+        if (now - this.lastWheelStep < WHEEL_THROTTLE_MS) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        this.lastWheelStep = now;
 
         e.preventDefault();
         e.stopPropagation();

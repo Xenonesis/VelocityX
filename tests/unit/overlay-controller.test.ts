@@ -113,7 +113,20 @@ describe("Overlay UI & VelocityControllerElement", () => {
     );
     expect(controller.desiredRate).toBe(1.1);
 
-    // Wheel down: decreases speed
+    // Immediate rapid wheel down is throttled to prevent runaway rates
+    pill.dispatchEvent(
+      new WheelEvent("wheel", {
+        deltaY: 100,
+        deltaMode: WheelEvent.DOM_DELTA_PIXEL,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    expect(controller.desiredRate).toBe(1.1); // Unchanged due to 120ms cooldown
+
+    // Wheel down after cooldown window expires
+    // @ts-expect-error - simulate throttle elapsed
+    overlay.lastWheelStep = performance.now() - 200;
     pill.dispatchEvent(
       new WheelEvent("wheel", {
         deltaY: 100,
@@ -123,7 +136,6 @@ describe("Overlay UI & VelocityControllerElement", () => {
       })
     );
     expect(controller.desiredRate).toBe(1.0);
-
     overlay.destroy();
   });
 

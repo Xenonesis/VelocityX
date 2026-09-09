@@ -2,6 +2,7 @@ import {
   MAX_CORRECTIONS_PER_WINDOW,
   CORRECTION_WINDOW_MS,
   NORMAL_SPEED,
+  MIN_SPEED,
   normalizeRate,
   RateSource,
 } from "./constants";
@@ -28,6 +29,7 @@ export class SpeedArbiter {
    * Sets the user's intended target rate explicitly (e.g. from shortcut or popup).
    */
   setDesiredRate(rate: number): void {
+    if (rate < MIN_SPEED || !Number.isFinite(rate)) return;
     this.desiredRate = normalizeRate(rate);
     this.consecutiveCorrections = 0;
     this.circuitBreakerTripped = false;
@@ -41,8 +43,12 @@ export class SpeedArbiter {
     isTrustedUserInteraction: boolean,
     fromExtension = false
   ): RateDecision {
-    const normalizedObserved = normalizeRate(observedRate);
+    // Ignore zero or sub-minimum rates (player pause, buffer freeze, or invalid speed)
+    if (observedRate < MIN_SPEED || !Number.isFinite(observedRate)) {
+      return { type: "ignore" };
+    }
 
+    const normalizedObserved = normalizeRate(observedRate);
     // 1. Explicit change requested by extension itself
     if (fromExtension) {
       this.desiredRate = normalizedObserved;

@@ -1,7 +1,7 @@
 import { migrateSettings } from "../storage/migrations";
 import { SettingsV1 } from "../storage/schema";
 import { DEFAULT_SETTINGS } from "../storage/defaults";
-
+import { MIN_SPEED } from "../core/constants";
 const SETTINGS_KEY = "velocitySettings";
 
 class IsolatedBridge {
@@ -48,7 +48,7 @@ class IsolatedBridge {
       const customEvt = e as CustomEvent<{ speed: number; domain?: string }>;
       const speed = customEvt.detail?.speed;
       const domain = customEvt.detail?.domain;
-      if (typeof speed === "number" && Number.isFinite(speed)) {
+      if (typeof speed === "number" && Number.isFinite(speed) && speed >= MIN_SPEED) {
         this.currentSettings.lastSpeed = speed;
         if (domain) {
           if (!this.currentSettings.domainSpeeds) {

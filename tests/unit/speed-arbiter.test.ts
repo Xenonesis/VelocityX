@@ -91,6 +91,25 @@ describe("SpeedArbiter - Critical Matrix (clone.md §65)", () => {
     });
     expect(arbiter.desiredRate).toBe(2.0); // original desired stays intact
   });
+
+  it("ignores zero or sub-minimum rates from player pauses and buffering", () => {
+    const arbiter = new SpeedArbiter(1.8);
+
+    // Player sets rate to 0 during pause or buffer (even if user clicked recently)
+    const decisionOnPause = arbiter.observeRateChange(0, true, false);
+    expect(decisionOnPause).toEqual({ type: "ignore" });
+    expect(arbiter.desiredRate).toBe(1.8); // Must never be overwritten by 0
+
+    // Negative or sub-minimum rates
+    const decisionSubMin = arbiter.observeRateChange(0.05, false, false);
+    expect(decisionSubMin).toEqual({ type: "ignore" });
+    expect(arbiter.desiredRate).toBe(1.8);
+
+    // Invalid rates
+    const decisionNaN = arbiter.observeRateChange(NaN, false, false);
+    expect(decisionNaN).toEqual({ type: "ignore" });
+    expect(arbiter.desiredRate).toBe(1.8);
+  });
 });
 
 describe("IntentClassifier", () => {

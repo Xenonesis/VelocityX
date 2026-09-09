@@ -9,7 +9,7 @@ import { ShortcutManager } from "../core/shortcut-manager";
 import { IntentClassifier } from "../core/intent-classifier";
 import { MediaObserver } from "../observers/media-observer";
 import { SpeedArbiter } from "../core/speed-arbiter";
-import { formatRate, MIN_OVERLAY_WIDTH, MIN_OVERLAY_HEIGHT } from "../core/constants";
+import { formatRate, MIN_SPEED, MIN_OVERLAY_WIDTH, MIN_OVERLAY_HEIGHT } from "../core/constants";
 import { VelocityControllerElement, registerVelocityController } from "../ui/overlay/velocity-controller";
 import { HUDToastElement, registerHUDToast } from "../ui/overlay/hud-toast";
 import { FullscreenObserver } from "../observers/fullscreen-observer";
@@ -198,7 +198,7 @@ class VelocityMainRuntime {
         if (decision.type === "restore") {
           ctrl.setRate(decision.rate, "restored");
         } else if (decision.type === "accept") {
-          if (siteConfig.rememberSpeed && decision.source !== "site-automatic") {
+          if (siteConfig.rememberSpeed && decision.source !== "site-automatic" && decision.rate >= MIN_SPEED) {
             window.dispatchEvent(
               new CustomEvent("velocity:storage:save-last-speed", {
                 detail: { speed: decision.rate, domain: window.location.hostname },

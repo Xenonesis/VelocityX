@@ -23,7 +23,8 @@ describe("constants and precision helpers", () => {
     expect(clamp(0.01, MIN_SPEED, MAX_SPEED)).toBe(MIN_SPEED);
     expect(clamp(20, MIN_SPEED, MAX_SPEED)).toBe(MAX_SPEED);
     expect(clamp(2.5, MIN_SPEED, MAX_SPEED)).toBe(2.5);
-    expect(clamp(NaN, MIN_SPEED, MAX_SPEED)).toBe(MIN_SPEED);
+    expect(clamp(NaN, MIN_SPEED, MAX_SPEED)).toBe(1.0);
+    expect(clamp(NaN, 5, 10)).toBe(5);
   });
 
   it("formats time correctly into MM:SS and HH:MM:SS", () => {
