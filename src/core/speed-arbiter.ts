@@ -41,14 +41,22 @@ export class SpeedArbiter {
   observeRateChange(
     observedRate: number,
     isTrustedUserInteraction: boolean,
-    fromExtension = false
+    fromExtension = false,
+    sourceOverride?: RateSource
   ): RateDecision {
     // Ignore zero or sub-minimum rates (player pause, buffer freeze, or invalid speed)
     if (observedRate < MIN_SPEED || !Number.isFinite(observedRate)) {
       return { type: "ignore" };
     }
-
     const normalizedObserved = normalizeRate(observedRate);
+
+    // 0. Temporary hold gesture (e.g. YouTube press-and-hold 2x speed)
+    // Allows temporary speed without overwriting desiredRate or saving to storage
+    if (sourceOverride === "temporary-hold") {
+      this.consecutiveCorrections = 0;
+      this.circuitBreakerTripped = false;
+      return { type: "accept", rate: normalizedObserved, source: "temporary-hold" };
+    }
     // 1. Explicit change requested by extension itself
     if (fromExtension) {
       this.desiredRate = normalizedObserved;

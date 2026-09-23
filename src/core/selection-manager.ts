@@ -37,30 +37,28 @@ export class SelectionManager {
         score += 1000;
       }
 
-      // 2. Recent user interaction within 5 seconds (+2000 bonus with decay)
+      // 2. Recent user interaction within 10 seconds (+3000 bonus with decay)
       const elapsed = now - ctrl.lastInteractionAt;
-      if (elapsed < 5000) {
-        score += 2000 - Math.floor(elapsed / 5);
+      if (elapsed < 10000) {
+        score += 3000 - Math.floor(elapsed / 4);
       }
 
-      // 3. Visible area (+0 to +500)
+      // 3. Visible area (+0 to +2000)
       try {
         const rect = media.getBoundingClientRect();
         if (rect.width > 0 && rect.height > 0) {
           const area = rect.width * rect.height;
-          // Scale area: 640x360 = ~230,000 px -> gives ~230 bonus
-          const areaBonus = Math.min(500, Math.floor(area / 1000));
+          const areaBonus = Math.min(2000, Math.floor(area / 500));
           score += areaBonus;
         }
       } catch {
         // Ignored in non-browser/mock DOM
       }
 
-      // 4. Muted / zero-volume background penalty (-100)
+      // 4. Muted / zero-volume background penalty (-500)
       if (media.muted || media.volume === 0) {
-        score -= 100;
+        score -= 500;
       }
-
       if (score > highestScore) {
         highestScore = score;
         bestCtrl = ctrl;

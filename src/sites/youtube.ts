@@ -1,7 +1,7 @@
 import { SiteHandler } from "./base-handler";
 import { MediaController } from "../core/media-controller";
 import { matchesDomainPattern } from "../utils/domain";
-
+import { RateSource } from "../core/constants";
 export class YouTubeHandler implements SiteHandler {
   readonly name = "YouTube";
   private abortController: AbortController | null = null;
@@ -30,9 +30,11 @@ export class YouTubeHandler implements SiteHandler {
     const { signal } = this.abortController;
 
     // 1. YouTube press-and-hold 2x speed feature tracking
-    media.addEventListener(
+    const shell = this.getMediaContainer(media) ?? media;
+    shell.addEventListener(
       "pointerdown",
-      () => {
+      (e: Event) => {
+        if (e instanceof MouseEvent && e.button !== 0) return;
         this.isPointerHolding = true;
       },
       { signal, passive: true }
@@ -41,9 +43,8 @@ export class YouTubeHandler implements SiteHandler {
     const onPointerRelease = () => {
       this.isPointerHolding = false;
     };
-    window.addEventListener("pointerup", onPointerRelease, { signal });
-    window.addEventListener("pointercancel", onPointerRelease, { signal });
-
+    window.addEventListener("pointerup", onPointerRelease, { signal, passive: true });
+    window.addEventListener("pointercancel", onPointerRelease, { signal, passive: true });
     // 2. YouTube SPA navigation handler
     window.addEventListener(
       "yt-navigate-finish",
@@ -54,7 +55,7 @@ export class YouTubeHandler implements SiteHandler {
             // Let YouTube initialize before restoring rate
             setTimeout(() => {
               if (media.playbackRate !== controller.desiredRate) {
-                media.playbackRate = controller.desiredRate;
+                controller.setRate(controller.desiredRate, "restored");
               }
             }, 100);
           }
@@ -66,10 +67,10 @@ export class YouTubeHandler implements SiteHandler {
     );
   }
 
-  classifyRateChange(_event: Event, media: HTMLMediaElement): "site-user" | undefined {
+  classifyRateChange(_event: Event, media: HTMLMediaElement): RateSource | undefined {
     // If user is holding mouse down on player, YouTube engages temporary 2x
     if (this.isPointerHolding && media.playbackRate === 2.0) {
-      return "site-user";
+      return "temporary-hold";
     }
     return undefined;
   }

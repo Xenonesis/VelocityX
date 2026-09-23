@@ -51,7 +51,7 @@ describe("Site Handlers & Registry", () => {
     watchVideo.remove();
   });
 
-  it("classifies YouTube 2x hold gesture as site-user", () => {
+  it("classifies YouTube 2x hold gesture as temporary-hold", () => {
     const ytHandler = new YouTubeHandler();
     const video = document.createElement("video");
 
@@ -61,6 +61,6 @@ describe("Site Handlers & Registry", () => {
     // Simulate pointerdown
     video.playbackRate = 2.0;
     (ytHandler as unknown as { isPointerHolding: boolean }).isPointerHolding = true;
-    expect(ytHandler.classifyRateChange(new Event("ratechange"), video)).toBe("site-user");
+    expect(ytHandler.classifyRateChange(new Event("ratechange"), video)).toBe("temporary-hold");
   });
 });

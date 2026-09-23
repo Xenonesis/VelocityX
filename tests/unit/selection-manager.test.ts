@@ -77,4 +77,51 @@ describe("SelectionManager", () => {
     const manager = new SelectionManager(registry);
     expect(manager.getActiveController()).toBe(ctrlMain);
   });
+
+  it("prefers large main video over small muted playing preview", () => {
+    const registry = new MediaRegistry();
+    const previewVideo = document.createElement("video");
+    const mainVideo = document.createElement("video");
+    document.body.appendChild(previewVideo);
+    document.body.appendChild(mainVideo);
+
+    // Preview video is playing but small and muted
+    Object.defineProperty(previewVideo, "paused", { value: false, configurable: true });
+    Object.defineProperty(previewVideo, "readyState", { value: 4, configurable: true });
+    previewVideo.muted = true;
+    previewVideo.getBoundingClientRect = () => ({
+      width: 160,
+      height: 90,
+      top: 0,
+      left: 0,
+      right: 160,
+      bottom: 90,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    // Main video is paused but large (1280x720) and unmuted
+    Object.defineProperty(mainVideo, "paused", { value: true, configurable: true });
+    mainVideo.muted = false;
+    mainVideo.getBoundingClientRect = () => ({
+      width: 1280,
+      height: 720,
+      top: 0,
+      left: 0,
+      right: 1280,
+      bottom: 720,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const ctrlPreview = registry.register(previewVideo);
+    const ctrlMain = registry.register(mainVideo);
+    ctrlPreview.lastInteractionAt = 0;
+    ctrlMain.lastInteractionAt = 0;
+
+    const manager = new SelectionManager(registry);
+    expect(manager.getActiveController()).toBe(ctrlMain);
+  });
 });

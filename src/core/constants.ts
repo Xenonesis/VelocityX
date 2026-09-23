@@ -16,14 +16,15 @@ export const MIN_OVERLAY_HEIGHT = 90;
 
 export const MAX_CORRECTIONS_PER_WINDOW = 6;
 export const CORRECTION_WINDOW_MS = 1000;
-export const INTENT_WINDOW_MS = 500;
+export const INTENT_WINDOW_MS = 3000;
 
 export type RateSource =
   | "extension"
   | "site-user"
   | "site-automatic"
   | "initial"
-  | "restored";
+  | "restored"
+  | "temporary-hold";
 
 /**
  * Normalizes floating point rates to 2 decimal places.

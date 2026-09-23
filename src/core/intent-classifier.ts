@@ -16,7 +16,7 @@ export class IntentClassifier {
     this.abortController = new AbortController();
     const { signal } = this.abortController;
 
-    const gestureEvents = ["pointerdown", "click", "touchstart", "keydown"] as const;
+    const gestureEvents = ["pointerdown", "pointerup", "click", "touchstart", "touchend", "keydown"] as const;
 
     for (const evt of gestureEvents) {
       try {

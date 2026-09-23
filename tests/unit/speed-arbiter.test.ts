@@ -110,6 +110,29 @@ describe("SpeedArbiter - Critical Matrix (clone.md §65)", () => {
     expect(decisionNaN).toEqual({ type: "ignore" });
     expect(arbiter.desiredRate).toBe(1.8);
   });
+
+  it("accepts temporary-hold without modifying desiredRate", () => {
+    const arbiter = new SpeedArbiter(1.25);
+
+    // Site enters temporary hold (e.g. YouTube press-and-hold 2x)
+    const holdDecision = arbiter.observeRateChange(2.0, true, false, "temporary-hold");
+    expect(holdDecision).toEqual({
+      type: "accept",
+      rate: 2.0,
+      source: "temporary-hold",
+    });
+    // desiredRate must remain untouched so release returns to 1.25
+    expect(arbiter.desiredRate).toBe(1.25);
+
+    // When released, site returns to 1.25 (matches desiredRate)
+    const releaseDecision = arbiter.observeRateChange(1.25, false, false);
+    expect(releaseDecision).toEqual({
+      type: "accept",
+      rate: 1.25,
+      source: "extension",
+    });
+    expect(arbiter.desiredRate).toBe(1.25);
+  });
 });
 
 describe("IntentClassifier", () => {

@@ -9,10 +9,14 @@ import { ShortcutManager } from "../core/shortcut-manager";
 import { IntentClassifier } from "../core/intent-classifier";
 import { MediaObserver } from "../observers/media-observer";
 import { SpeedArbiter } from "../core/speed-arbiter";
-import { formatRate, MIN_SPEED, MIN_OVERLAY_WIDTH, MIN_OVERLAY_HEIGHT } from "../core/constants";
+import { formatRate, MIN_SPEED, MIN_OVERLAY_WIDTH, MIN_OVERLAY_HEIGHT, RateSource } from "../core/constants";
 import { VelocityControllerElement, registerVelocityController } from "../ui/overlay/velocity-controller";
 import { HUDToastElement, registerHUDToast } from "../ui/overlay/hud-toast";
 import { FullscreenObserver } from "../observers/fullscreen-observer";
+import { SiteHandlerRegistry } from "../sites/registry";
+import { YouTubeHandler } from "../sites/youtube";
+import { NetflixHandler } from "../sites/netflix";
+
 class VelocityMainRuntime {
   private settings: SettingsV1 = DEFAULT_SETTINGS;
   private siteRuleEngine = new SiteRuleEngine(this.settings);
@@ -23,6 +27,7 @@ class VelocityMainRuntime {
   private shortcutManager: ShortcutManager;
   private mediaObserver: MediaObserver;
   private fullscreenObserver: FullscreenObserver;
+  private siteHandlerRegistry = new SiteHandlerRegistry();
 
   private arbiters = new WeakMap<HTMLMediaElement, SpeedArbiter>();
   private overlays = new WeakMap<HTMLMediaElement, VelocityControllerElement>();
@@ -31,6 +36,9 @@ class VelocityMainRuntime {
   constructor() {
     registerVelocityController();
     registerHUDToast();
+
+    this.siteHandlerRegistry.register(new YouTubeHandler());
+    this.siteHandlerRegistry.register(new NetflixHandler());
 
     this.actionHandler = new ActionHandler(this.selectionManager, {
       onOverlayToggle: () => this.toggleAllOverlays(),
@@ -51,13 +59,11 @@ class VelocityMainRuntime {
 
   init(): void {
     this.bindBridgeListeners();
-    this.shortcutManager.attach(window);
-    this.mediaObserver.observe(document);
-
-    // Notify isolated bridge that main world is initialized
+    this.shortcutManager.attach();
+    this.mediaObserver.observe();
+    // Dispatch ready event to isolated world bridge
     window.dispatchEvent(new CustomEvent("velocity:main:ready"));
   }
-
   private bindBridgeListeners(): void {
     window.addEventListener("velocity:settings:init", (e: Event) => {
       const customEvt = e as CustomEvent<SettingsV1>;
@@ -86,16 +92,16 @@ class VelocityMainRuntime {
       if (!nonce) return;
 
       const activeCtrl = this.selectionManager.getActiveController();
-      const controllers = this.mediaRegistry.getAll();
-      const siteConfig = this.siteRuleEngine.resolveSiteConfig(window.location);
+      const allControllers = this.mediaRegistry.getAll();
 
       window.dispatchEvent(
         new CustomEvent(`velocity:status:reply:${nonce}`, {
           detail: {
-            hasMedia: controllers.length > 0,
-            activeRate: activeCtrl ? activeCtrl.desiredRate : siteConfig.initialSpeed,
-            mediaCount: controllers.length,
-            siteEnabled: siteConfig.enabled,
+            hasMedia: allControllers.length > 0,
+            mediaCount: allControllers.length,
+            activeRate: activeCtrl ? activeCtrl.desiredRate : this.settings.defaultSpeed,
+            activeMuted: activeCtrl ? activeCtrl.media.muted : false,
+            activePaused: activeCtrl ? activeCtrl.media.paused : true,
           },
         })
       );
@@ -106,26 +112,24 @@ class VelocityMainRuntime {
     this.settings = newSettings;
     this.siteRuleEngine.updateSettings(newSettings);
     this.shortcutManager.setShortcuts(newSettings.shortcuts);
-    this.shortcutManager.enabled = newSettings.enabled;
-
     const siteConfig = this.siteRuleEngine.resolveSiteConfig(window.location);
 
-    // Update arbiters and controllers
     for (const ctrl of this.mediaRegistry.getAll()) {
       const arbiter = this.arbiters.get(ctrl.media);
       if (arbiter) {
         arbiter.fightAutomaticResets = newSettings.compatibility.fightAutomaticRateReset;
       }
+
       const overlay = this.overlays.get(ctrl.media);
       if (overlay) {
-        overlay.setVisible(siteConfig.enabled && siteConfig.overlayEnabled);
+        overlay.setVisible(siteConfig.overlayEnabled && !this.settings.startHidden);
       }
     }
   }
+
   private handleActionExecuted(action: MediaAction, targetController: MediaController | null): void {
-    const media = targetController?.media || this.selectionManager.getActiveController()?.media;
-    if (!media) return;
-    const toast = this.toasts.get(media);
+    if (!targetController) return;
+    const toast = this.toasts.get(targetController.media);
     if (!toast) return;
 
     switch (action.type) {
@@ -133,29 +137,29 @@ class VelocityMainRuntime {
       case "speed.decrease":
       case "speed.set":
       case "speed.reset":
-      case "speed.preferred.toggle":
-        toast.show(`${formatRate(targetController ? targetController.desiredRate : 1.0)}x`, "⚡");
+      case "speed.preferred.toggle": {
+        const rateStr = formatRate(targetController.desiredRate);
+        toast.show(`${rateStr}×`, "");
         break;
-      case "seek.relative":
-        toast.show(`${action.seconds > 0 ? "+" : ""}${action.seconds}s`, action.seconds > 0 ? "⏩" : "⏪");
+      }
+      case "seek.relative": {
+        const sign = action.seconds >= 0 ? "+" : "";
+        toast.show(`${sign}${action.seconds}s`, "⏩");
         break;
-      case "marker.set":
-        toast.show(`Marker set (${Math.round(media.currentTime)}s)`, "📍");
+      }
+      case "marker.set": {
+        toast.show("Marker Set", "📍");
         break;
-      case "marker.jump":
-        toast.show("Jumped to marker", "🎯");
-        break;
-      case "overlay.toggle": {
-        const overlay = this.overlays.get(media);
-        const isHidden = overlay?.getAttribute("data-hidden") === "true";
-        toast.show(isHidden ? "Controller Hidden" : "Controller Visible", "👁️");
+      }
+      case "marker.jump": {
+        toast.show("Jumped to Marker", "🎯");
         break;
       }
       case "audio.boost.increase":
       case "audio.boost.decrease":
       case "audio.boost.set": {
-        const gain = targetController ? Math.round(targetController.getAudioGain() * 100) : 100;
-        toast.show(`Volume ${gain}%`, gain > 100 ? "🔊" : "🔉");
+        const gainPct = Math.round(targetController.getAudioGain() * 100);
+        toast.show(`Gain: ${gainPct}%`, "🔊");
         break;
       }
       case "pitch.toggle": {
@@ -188,17 +192,25 @@ class VelocityMainRuntime {
     );
     this.arbiters.set(media, arbiter);
 
+    const siteHandler = this.siteHandlerRegistry.findHandler(window.location);
+
     const controller = this.mediaRegistry.register(media, siteConfig.initialSpeed, {
       onRateChange: (ctrl, observedRate, source) => {
+        const siteSource = siteHandler?.classifyRateChange?.(new Event("ratechange"), ctrl.media);
         const isUserIntent = this.intentClassifier.isRecentInteraction();
         const fromExtension = source === "extension";
 
-        const decision = arbiter.observeRateChange(observedRate, isUserIntent, fromExtension);
+        const decision = arbiter.observeRateChange(observedRate, isUserIntent, fromExtension, siteSource);
 
         if (decision.type === "restore") {
           ctrl.setRate(decision.rate, "restored");
         } else if (decision.type === "accept") {
-          if (siteConfig.rememberSpeed && decision.source !== "site-automatic" && decision.rate >= MIN_SPEED) {
+          if (
+            siteConfig.rememberSpeed &&
+            decision.source !== "site-automatic" &&
+            decision.source !== "temporary-hold" &&
+            decision.rate >= MIN_SPEED
+          ) {
             window.dispatchEvent(
               new CustomEvent("velocity:storage:save-last-speed", {
                 detail: { speed: decision.rate, domain: window.location.hostname },
@@ -220,6 +232,9 @@ class VelocityMainRuntime {
         this.arbiters.delete(ctrl.media);
       },
     });
+
+    // Notify site handler
+    siteHandler?.onMediaAdded?.(media, controller);
 
     // Mount toast for visual feedback
     this.mountToast(media);
@@ -252,8 +267,9 @@ class VelocityMainRuntime {
   private mountOverlay(media: HTMLMediaElement, controller: MediaController): VelocityControllerElement | null {
     if (this.overlays.has(media)) return this.overlays.get(media) ?? null;
 
-    // Find closest container wrapper or parent node
-    const container = (media.parentElement || media.parentNode) as HTMLElement | null;
+    // Find closest container wrapper or player shell from site handler
+    const siteHandler = this.siteHandlerRegistry.findHandler(window.location);
+    const container = (siteHandler?.getMediaContainer?.(media) || media.parentElement || media.parentNode) as HTMLElement | null;
     if (!container) return null;
 
     // Ensure container has relative/absolute positioning context
@@ -271,7 +287,8 @@ class VelocityMainRuntime {
   }
   private mountToast(media: HTMLMediaElement): HUDToastElement | null {
     if (this.toasts.has(media)) return this.toasts.get(media) ?? null;
-    const container = (media.parentElement || media.parentNode) as HTMLElement | null;
+    const siteHandler = this.siteHandlerRegistry.findHandler(window.location);
+    const container = (siteHandler?.getMediaContainer?.(media) || media.parentElement || media.parentNode) as HTMLElement | null;
     if (!container) return null;
 
     const toast = new HUDToastElement();
