@@ -162,6 +162,7 @@ export class VelocityControllerElement extends HTMLElement {
   private controller: MediaController | null = null;
   private resizeObserver: ResizeObserver | null = null;
   private currentPosition: DragPosition = { xRatio: 0.02, yRatio: 0.02 };
+  private container: HTMLElement | null = null;
   private highlightTimer: number | null = null;
   private hoverStart = 0;
   private lastWheelStep = 0;
@@ -346,6 +347,7 @@ export class VelocityControllerElement extends HTMLElement {
   ): void {
     this.controller = controller;
     this.currentPosition = initialPos;
+    this.container = container;
 
     this.updateRateDisplay(controller.desiredRate);
 
@@ -361,24 +363,27 @@ export class VelocityControllerElement extends HTMLElement {
         },
         onDrag: (pos) => {
           this.currentPosition = pos;
-          this.updatePositionStyles(container);
+          this.updatePositionStyles();
         },
         onDragEnd: (pos) => {
           this.pillElem.classList.remove("dragging");
           this.currentPosition = pos;
-          this.updatePositionStyles(container);
+          this.updatePositionStyles();
+          window.dispatchEvent(
+            new CustomEvent("velocity:storage:save-position", { detail: pos })
+          );
         },
       }
     );
 
     // Initial position update
-    this.updatePositionStyles(container);
+    this.updatePositionStyles();
 
     // Setup ResizeObserver on container to adjust positioning on resize
     try {
       this.resizeObserver?.disconnect();
       this.resizeObserver = new ResizeObserver(() => {
-        this.updatePositionStyles(container);
+        this.updatePositionStyles();
       });
       this.resizeObserver.observe(container);
     } catch {
@@ -399,7 +404,9 @@ export class VelocityControllerElement extends HTMLElement {
     }
   }
 
-  updatePositionStyles(container: HTMLElement): void {
+  updatePositionStyles(): void {
+    const container = this.container;
+    if (!container) return;
     const rect = container.getBoundingClientRect();
     if (rect.width <= 0 || rect.height <= 0) return;
 
@@ -408,6 +415,12 @@ export class VelocityControllerElement extends HTMLElement {
 
     this.style.left = `${leftPx}px`;
     this.style.top = `${topPx}px`;
+  }
+
+  setPosition(pos: DragPosition): void {
+    this.currentPosition = pos;
+    this.dragHandler?.setPosition(pos);
+    this.updatePositionStyles();
   }
 
   setVisible(visible: boolean): void {
@@ -425,6 +438,7 @@ export class VelocityControllerElement extends HTMLElement {
     this.resizeObserver?.disconnect();
     this.resizeObserver = null;
     this.controller = null;
+    this.container = null;
     this.remove();
   }
 }

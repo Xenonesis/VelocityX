@@ -151,6 +151,43 @@ describe("Overlay UI & VelocityControllerElement", () => {
 
     overlay.destroy();
   });
+
+  it("persists position to storage on drag end", () => {
+    const overlay = new VelocityControllerElement();
+    container.appendChild(overlay);
+    overlay.attachController(controller, container, { xRatio: 0.1, yRatio: 0.1 });
+
+    const saveSpy = vi.fn();
+    window.addEventListener("velocity:storage:save-position", saveSpy);
+
+    // @ts-expect-error - internal pillElem
+    const pill = overlay.pillElem as HTMLDivElement;
+    pill.dispatchEvent(new MouseEvent("pointerdown", { button: 0, clientX: 40, clientY: 45, bubbles: true }));
+    pill.dispatchEvent(new MouseEvent("pointermove", { clientX: 240, clientY: 135, bubbles: true }));
+    pill.dispatchEvent(new MouseEvent("pointerup", { clientX: 240, clientY: 135, bubbles: true }));
+
+    expect(saveSpy).toHaveBeenCalledTimes(1);
+    const detail = saveSpy.mock.calls[0][0].detail;
+    expect(detail.xRatio).toBeCloseTo(0.25);
+    expect(detail.yRatio).toBeCloseTo(0.2);
+    expect(overlay.style.left).toBe("200px");
+    expect(overlay.style.top).toBe("90px");
+
+    window.removeEventListener("velocity:storage:save-position", saveSpy);
+    overlay.destroy();
+  });
+
+  it("applies a saved position to an existing overlay", () => {
+    const overlay = new VelocityControllerElement();
+    container.appendChild(overlay);
+    overlay.attachController(controller, container, { xRatio: 0.1, yRatio: 0.1 });
+
+    overlay.setPosition({ xRatio: 0.5, yRatio: 0.4 });
+    expect(overlay.style.left).toBe("400px");
+    expect(overlay.style.top).toBe("180px");
+
+    overlay.destroy();
+  });
 });
 
 describe("DragHandler", () => {

@@ -123,6 +123,7 @@ class VelocityMainRuntime {
       const overlay = this.overlays.get(ctrl.media);
       if (overlay) {
         overlay.setVisible(siteConfig.overlayEnabled && !this.settings.startHidden);
+        overlay.setPosition(newSettings.overlay.position);
       }
     }
   }
@@ -314,7 +315,7 @@ class VelocityMainRuntime {
     for (const ctrl of this.mediaRegistry.getAll()) {
       const overlay = this.overlays.get(ctrl.media);
       if (overlay && ctrl.media.parentElement) {
-        overlay.updatePositionStyles(ctrl.media.parentElement);
+        overlay.updatePositionStyles();
       }
     }
   }
