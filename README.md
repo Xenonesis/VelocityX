@@ -4,7 +4,7 @@
 
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-success?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-55%20passed-brightgreen?style=flat-square)
+![Tests](https://img.shields.io/badge/Tests-Vitest-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
 ---
@@ -93,11 +93,10 @@ npm install
 npm run build
 ```
 
-### 3. Load Extension in Chrome
-1. Open Google Chrome or any Chromium-based browser (Brave, Edge, Opera).
-2. Navigate to `chrome://extensions`.
-3. Enable **Developer mode** (toggle in the top-right corner).
-4. Click **Load unpacked** and select the `dist/` directory inside this repository.
+### 3. Load Extension in Chrome or Edge
+1. Open `chrome://extensions` in Chrome or `edge://extensions` in Edge.
+2. Enable **Developer mode**.
+3. Click **Load unpacked** and select the `dist/` directory inside this repository.
 
 ---
 
@@ -106,7 +105,7 @@ npm run build
 VelocityX includes comprehensive unit and integration tests covering rate arbitration, math normalization, DOM mutation filtering, input safety, and site compatibility.
 
 ```bash
-# Run all 55 unit and component tests
+# Run the unit and component tests
 npm run test
 
 # Run TypeScript typechecking
@@ -118,7 +117,7 @@ npm run typecheck
 ## Security & Permissions
 
 VelocityX strictly adheres to the principle of least privilege:
-- **`permissions: ["storage"]`** — Used exclusively for synchronizing user preferences and custom site rules.
+- **`permissions: ["storage", "contextMenus"]`** — Used for preferences, site rules, and playback context-menu actions.
 - **Zero remote scripts or eval**: 100% offline and statically bundled.
 - **Zero telemetry / data tracking**: No user data ever leaves the local browser.
 
