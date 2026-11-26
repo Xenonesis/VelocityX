@@ -54,6 +54,12 @@ function assert(condition: boolean, message: string): void {
   }
 }
 
+function delay(ms: number): Promise<void> {
+  const { promise, resolve } = Promise.withResolvers<void>();
+  setTimeout(resolve, ms);
+  return promise;
+}
+
 async function runE2ETests() {
   console.log("=================================================");
   console.log("🚀 Starting VelocityX End-to-End (E2E) Test Suite");
@@ -252,6 +258,57 @@ async function runE2ETests() {
     const previewRate = await multiPage.$eval("#preview-video", (v) => (v as HTMLVideoElement).playbackRate);
     assert(Math.abs(mainRate - 1.1) < 0.01, `Active main video should increase to 1.10, got ${mainRate}`);
     console.log(`   ✅ Active unmuted video prioritized: Main video rate = ${mainRate.toFixed(2)}x, Preview = ${previewRate.toFixed(2)}x`);
+
+    // =========================================================================
+    // TEST 6: HUD Drag Position Persistence (real pointer drag + reload)
+    // =========================================================================
+    console.log("\n🧪 Test 6: HUD Drag Position Persistence");
+    const dragPage = await browser.newPage();
+    await dragPage.goto(`${baseUrl}/simple-video.html`, { waitUntil: "networkidle0" });
+    await dragPage.waitForSelector("velocity-controller", { timeout: 5000 });
+
+    const readOverlayPos = () =>
+      dragPage.evaluate(() => {
+        const el = document.querySelector("velocity-controller") as HTMLElement | null;
+        if (!el) return null;
+        const rect = el.getBoundingClientRect();
+        return {
+          left: parseFloat(el.style.left),
+          top: parseFloat(el.style.top),
+          x: rect.left,
+          y: rect.top,
+          w: rect.width,
+          h: rect.height,
+        };
+      });
+
+    const beforeDrag = (await readOverlayPos())!;
+    const grabX = beforeDrag.x + 40;
+    const grabY = beforeDrag.y + 24;
+    await dragPage.mouse.move(grabX, grabY);
+    await dragPage.mouse.down();
+    await dragPage.mouse.move(grabX + 150, grabY + 80, { steps: 10 });
+    await dragPage.mouse.up();
+    await delay(700);
+
+    const afterDrag = (await readOverlayPos())!;
+    assert(
+      Math.abs(afterDrag.left - beforeDrag.left) > 50,
+      `HUD left should move on drag (before ${beforeDrag.left}, after ${afterDrag.left})`
+    );
+    console.log(`   ✅ HUD dragged: left=${afterDrag.left}px top=${afterDrag.top}px`);
+
+    await dragPage.reload({ waitUntil: "networkidle0" });
+    await dragPage.waitForSelector("velocity-controller", { timeout: 5000 });
+    await delay(500);
+    const afterReload = (await readOverlayPos())!;
+    assert(
+      Math.abs(afterReload.left - afterDrag.left) < 5 && Math.abs(afterReload.top - afterDrag.top) < 5,
+      `HUD position must persist after reload (expected ${afterDrag.left}/${afterDrag.top}, got ${afterReload.left}/${afterReload.top})`
+    );
+    console.log("   ✅ HUD position persisted across page reload");
+
+    await dragPage.close();
 
     console.log("\n=================================================");
     console.log("🎉 ALL END-TO-END (E2E) TESTS PASSED SUCCESSFULLY!");
