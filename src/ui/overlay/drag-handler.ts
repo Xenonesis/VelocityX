@@ -69,13 +69,14 @@ export class DragHandler {
         const container = this.getContainer();
         if (!container) return;
 
+        const containerRect = container.getBoundingClientRect();
+        if (containerRect.width <= 0 || containerRect.height <= 0) return;
+
         this.isDragging = true;
         this.startPointerX = e.clientX;
         this.startPointerY = e.clientY;
 
-        const containerRect = container.getBoundingClientRect();
         const elemRect = this.element.getBoundingClientRect();
-
         this.startElemX = elemRect.left - containerRect.left;
         this.startElemY = elemRect.top - containerRect.top;
 
@@ -92,15 +93,15 @@ export class DragHandler {
       { signal }
     );
 
-    this.element.addEventListener(
+    window.addEventListener(
       "pointermove",
       (e: PointerEvent) => {
         if (!this.isDragging) return;
 
         const container = this.getContainer();
         if (!container) return;
-
         const containerRect = container.getBoundingClientRect();
+        if (containerRect.width <= 0 || containerRect.height <= 0) return;
         const elemRect = this.element.getBoundingClientRect();
 
         const maxAvailableX = Math.max(containerRect.width - elemRect.width, 1);
@@ -122,7 +123,7 @@ export class DragHandler {
 
         this.callbacks.onDrag?.(this.currentPos);
       },
-      { signal }
+      { signal, capture: true }
     );
 
     const onPointerEnd = (e: PointerEvent) => {
@@ -140,8 +141,8 @@ export class DragHandler {
       this.callbacks.onDragEnd?.(this.currentPos);
     };
 
-    this.element.addEventListener("pointerup", onPointerEnd, { signal });
-    this.element.addEventListener("pointercancel", onPointerEnd, { signal });
+    window.addEventListener("pointerup", onPointerEnd, { signal, capture: true });
+    window.addEventListener("pointercancel", onPointerEnd, { signal, capture: true });
   }
 
   destroy(): void {

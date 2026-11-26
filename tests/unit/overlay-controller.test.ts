@@ -162,9 +162,9 @@ describe("Overlay UI & VelocityControllerElement", () => {
 
     // @ts-expect-error - internal pillElem
     const pill = overlay.pillElem as HTMLDivElement;
-    pill.dispatchEvent(new MouseEvent("pointerdown", { button: 0, clientX: 40, clientY: 45, bubbles: true }));
-    pill.dispatchEvent(new MouseEvent("pointermove", { clientX: 240, clientY: 135, bubbles: true }));
-    pill.dispatchEvent(new MouseEvent("pointerup", { clientX: 240, clientY: 135, bubbles: true }));
+    pill.dispatchEvent(new MouseEvent("pointerdown", { button: 0, clientX: 40, clientY: 45, bubbles: true, composed: true }));
+    pill.dispatchEvent(new MouseEvent("pointermove", { clientX: 240, clientY: 135, bubbles: true, composed: true }));
+    pill.dispatchEvent(new MouseEvent("pointerup", { clientX: 240, clientY: 135, bubbles: true, composed: true }));
 
     expect(saveSpy).toHaveBeenCalledTimes(1);
     const detail = saveSpy.mock.calls[0][0].detail;
@@ -186,6 +186,54 @@ describe("Overlay UI & VelocityControllerElement", () => {
     expect(overlay.style.left).toBe("400px");
     expect(overlay.style.top).toBe("180px");
 
+    overlay.destroy();
+  });
+
+  it("ends drag when pointerup lands outside the overlay", () => {
+    const overlay = new VelocityControllerElement();
+    container.appendChild(overlay);
+    overlay.attachController(controller, container, { xRatio: 0.1, yRatio: 0.1 });
+
+    const saveSpy = vi.fn();
+    window.addEventListener("velocity:storage:save-position", saveSpy);
+
+    // @ts-expect-error - internal pillElem
+    const pill = overlay.pillElem as HTMLDivElement;
+    pill.dispatchEvent(new MouseEvent("pointerdown", { button: 0, clientX: 40, clientY: 45, bubbles: true, composed: true }));
+    window.dispatchEvent(new MouseEvent("pointermove", { clientX: 240, clientY: 135, bubbles: true }));
+    window.dispatchEvent(new MouseEvent("pointerup", { clientX: 240, clientY: 135, bubbles: true }));
+
+    expect(saveSpy).toHaveBeenCalledTimes(1);
+    expect(pill.classList.contains("dragging")).toBe(false);
+
+    window.removeEventListener("velocity:storage:save-position", saveSpy);
+    overlay.destroy();
+  });
+
+  it("does not start a drag on a zero-size container", () => {
+    const zero = document.createElement("div");
+    Object.defineProperty(zero, "getBoundingClientRect", {
+      value: () => ({ left: 0, top: 0, width: 0, height: 0 }),
+      configurable: true,
+    });
+
+    const overlay = new VelocityControllerElement();
+    zero.appendChild(overlay);
+    overlay.attachController(controller, zero, { xRatio: 0.1, yRatio: 0.1 });
+
+    const saveSpy = vi.fn();
+    window.addEventListener("velocity:storage:save-position", saveSpy);
+
+    // @ts-expect-error - internal pillElem
+    const pill = overlay.pillElem as HTMLDivElement;
+    pill.dispatchEvent(new MouseEvent("pointerdown", { button: 0, clientX: 10, clientY: 10, bubbles: true, composed: true }));
+    window.dispatchEvent(new MouseEvent("pointermove", { clientX: 100, clientY: 100, bubbles: true }));
+    window.dispatchEvent(new MouseEvent("pointerup", { clientX: 100, clientY: 100, bubbles: true }));
+
+    expect(saveSpy).not.toHaveBeenCalled();
+    expect(overlay.style.left).not.toContain("NaN");
+
+    window.removeEventListener("velocity:storage:save-position", saveSpy);
     overlay.destroy();
   });
 });

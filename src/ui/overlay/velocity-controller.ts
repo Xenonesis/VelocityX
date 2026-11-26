@@ -355,7 +355,7 @@ export class VelocityControllerElement extends HTMLElement {
     this.dragHandler?.destroy();
     this.dragHandler = new DragHandler(
       this.pillElem,
-      () => container,
+      () => this.resolveContainer(),
       initialPos,
       {
         onDragStart: () => {
@@ -405,7 +405,7 @@ export class VelocityControllerElement extends HTMLElement {
   }
 
   updatePositionStyles(): void {
-    const container = this.container;
+    const container = this.resolveContainer();
     if (!container) return;
     const rect = container.getBoundingClientRect();
     if (rect.width <= 0 || rect.height <= 0) return;
@@ -421,6 +421,14 @@ export class VelocityControllerElement extends HTMLElement {
     this.currentPosition = pos;
     this.dragHandler?.setPosition(pos);
     this.updatePositionStyles();
+  }
+
+  private resolveContainer(): HTMLElement | null {
+    const parent = this.parentElement;
+    if (parent instanceof HTMLElement) {
+      this.container = parent;
+    }
+    return this.container;
   }
 
   setVisible(visible: boolean): void {
